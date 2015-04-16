@@ -134,6 +134,7 @@ end
 
 % Clear the screen
 sca;
+
 clear all;
 
 end
