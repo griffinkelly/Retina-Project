@@ -1,4 +1,4 @@
-function WhiteNoise(numRects, rectSize, scale, syncToVBL, dontclear)
+function WhiteNoise(numRects, rectSize, scale, duration, int_amplitude, syncToVBL, dontclear)
 % MyWhiteNoise([numRects=1][, rectSize=128][, scale=1][, syncToVBL=1][, dontclear=0])
 %
 % Demonstrates how to generate and draw noise patches on-the-fly in a fast way. Can be
@@ -76,8 +76,14 @@ end
 if nargin < 3 || isempty(scale)
     scale = 1; % Don't up- or downscale patch by default.
 end
+if nargin < 4 || isempty(duration)
+    duration = 10; 
+end
+if nargin < 5 || isempty(int_amplitude)
+    int_amplitude = 1; % Synchronize to vertical retrace by default.
+end
 
-if nargin < 4 || isempty(syncToVBL)
+if nargin < 6 || isempty(syncToVBL)
     syncToVBL = 1; % Synchronize to vertical retrace by default.
 end
 
@@ -87,9 +93,10 @@ else
     asyncflag = 2;
 end
 
-if nargin < 5 || isempty(dontclear)
+if nargin < 7 || isempty(dontclear)
     dontclear = 0; % Clear backbuffer to background color by default after each bufferswap.
 end
+
 
 if dontclear > 0
     % A value of 2 will prevent any change to the backbuffer after a
@@ -97,6 +104,7 @@ if dontclear > 0
     % that, but you'll might save up to 1 millisecond.
     dontclear = 2;
 end
+Screen('Preference', 'VisualDebugLevel', 1);
 KbName('UnifyKeyNames');
 blackkey = KbName('b');
 whitekey = KbName('w');
@@ -117,9 +125,10 @@ exitkey = KbName('x');
 %[keydown, secs, keycode, deltasecs] = KbCheck;
 
 keepdisplay = 1;
-int_amplitude = 1;
+%int_amplitude = 1;
 maxSize = 1080;
 minpixel = 1;
+
 %circlecolors = [255 0 0 ; 0 255 0; 0 0 255];
 
 try
@@ -196,7 +205,7 @@ while keepdisplay
             % texture! The default bilinear filtering would introduce local
             % correlations when scaling is applied:
 			Screen('DrawTexture', win, tex, [], dstRect(i,:), [], 0);
-%			Screen('DrawTexture', win, tex, [], dstRect(i,:), [], 0, [0: 255: 0]);
+%			Screen('DrawTexxxture', win, tex, [], dstRect(i,:), [], 0, [0: 255: 0]);
 			
 %			Screen(win, 'Flip'); 
 			
@@ -207,13 +216,13 @@ while keepdisplay
 %		KbReleaseWait;
   	if keycode(exitkey)
 		Screen('CloseAll');
-		str = sprintf('%d, %d, %d', int_amplitude, rectSize, scale);
+		str = sprintf('%d, %d, %d',  rectSize, scale, int_amplitude);
 		disp(str);
 %		psychrethrow(psychlasterror);
 		break
 	elseif keycode(increaseint_amplitude) 
 		for i=1:numRects
-			int_amplitude = int_amplitude + 5;
+			int_amplitude = int_amplitude + .1;
 			noiseimg=uint8(int_amplitude*(round(rand(rectSize, rectSize))*255));
 %			noiseimg=(int_amplitude*(floor(2*rand(rectSize, rectSize))*2-1) + 128); 
 				%with only black and white)
@@ -227,7 +236,7 @@ while keepdisplay
 		end
 	elseif keycode(decreaseint_amplitude) 
 		for i=1:numRects
-			int_amplitude = int_amplitude - 5;
+			int_amplitude = int_amplitude - .1;
 			noiseimg=uint8(int_amplitude*(round(rand(rectSize, rectSize))*255));
 %			noiseimg=(int_amplitude*(floor(2*rand(rectSize, rectSize))*2-1) + 128);
 %			noiseimg=(int_amplitude*randn(rectSize, rectSize) + 128);
@@ -355,10 +364,10 @@ while keepdisplay
 %        count = count + 1;
     telapsed = GetSecs - tstart;
     
-    if telapsed>10
+    if telapsed>duration
         Screen('CloseAll');
-		str = sprintf('%d, %d, %d', int_amplitude, rectSize, scale);
-		disp(str);
+		str = sprintf('%d, %d, %d', rectSize, scale, int_amplitude);
+	x	disp(str);
 %		psychrethrow(psychlasterror);
 		break
     end

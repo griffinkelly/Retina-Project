@@ -89,7 +89,7 @@ if nargin < 1 || isempty(angle)
     % Tilt angle of the grating:
     angle = 0;
 end
-
+Screen('Preference', 'VisualDebugLevel', 1);
 % Amplitude of the grating in units of absolute display intensity range: A
 % setting of 0.5 means that the grating will extend over a range from -0.5
 % up to 0.5, i.e., it will cover a total range of 1.0 == 100% of the total

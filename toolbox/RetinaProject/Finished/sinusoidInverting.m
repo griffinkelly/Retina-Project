@@ -1,4 +1,4 @@
- function sinusoidInverting(morphType, showMaskOnly, degree, hertz, amplitude)
+ function sinusoidInverting(morphType, showMaskOnly, degree, hertz, amplitude,duration)
 % SimpleImageMixingDemo([morphType=gaussian][, showMaskOnly=0])
 %
 % This is a simple demonstration of shader use to morph two images/textures 
@@ -13,9 +13,6 @@
 % Made after ImageMixingTutorial.m by Mario Kleiner
 % Written by Natalia Zaretskaya 25 Nov 2014
 
-% Basepath to our own demo images:
-basepath = [ PsychtoolboxRoot 'PsychDemos' filesep ];
-imageFile = [basepath 'konijntjes1024x768blur.jpg'];
 
 % Use normalized color range, ranging from 0 to 1
 PsychDefaultSetup(2);
@@ -37,7 +34,14 @@ end
 if nargin < 5 || isempty(amplitude)
     amplitude = .5;
 end
+if nargin < 6 || isempty(duration)
+    duration = 2000;
+end
+if nargin < 7 || isempty(width)
+    width = 0.01 ;
+end
 % open window
+Screen('Preference', 'VisualDebugLevel', 1);
 [w, wrect] = PsychImaging('OpenWindow',  max(Screen('Screens')), [0.5 0.5 0.5], []);
 [cx, xy] = RectCenter(wrect);
 Screen('TextSize', w, 20)
@@ -53,7 +57,7 @@ masktex = Screen('OpenOffscreenWindow', w, [0 0 0 0]);
     s=min(2000, 2000 ) / 6;
 	[x,y]=meshgrid(-s:s-1, -s:s-1);
 	angle=degree*pi/180; % 30 deg orientation.
-	f=0.01*2*pi; % cycles/pixel
+	f=width *2*pi; % cycles/pixel
     a=cos(angle)*f;
 	b=sin(angle)*f;
                 
@@ -119,7 +123,7 @@ while 1
         weights = [1-eweight, 0, 0, eweight];
          vector = [vector,2];
     end
-    Screen('DrawTexture', masktex, morphTex, [], CenterRectOnPoint(wrect./1.5, cx, xy), [], [], [], weights);
+    Screen('DrawTexture', masktex, morphTex, [], CenterRectOnPoint(wrect./1, cx, xy), [], [], [], weights);
     
     % First clear framebuffer to backgroundcolor, not using
     % alpha blending (== GL_ONE, GL_ZERO). Enable all channels
@@ -146,11 +150,11 @@ while 1
         
         % draw first image
         Screen('BlendFunction', w, GL_DST_ALPHA, GL_ZERO, [1 1 1 0]);
-        Screen('DrawTexture', w, tex1, [], CenterRectOnPoint(wrect./1.5, cx, xy));
+        Screen('DrawTexture', w, tex1, [], CenterRectOnPoint(wrect./1, cx, xy));
         
         % draw second image
         Screen('BlendFunction', w, GL_ONE_MINUS_DST_ALPHA, GL_ONE, [1 1 1 0]);
-        Screen('DrawTexture', w, tex2, [], CenterRectOnPoint(wrect./1.5, cx, xy));
+        Screen('DrawTexture', w, tex2, [], CenterRectOnPoint(wrect./1, cx, xy));
     end
     
     % show morphing stage as value:
@@ -160,12 +164,12 @@ while 1
     Screen('Flip', w);
     
     c = c+1; % update the count
-    if length(vector) == 940
-        mean(vector)
-        
-        plot(vector)
-        figure(2)
-        plot(morphVector)
+    if length(vector) == duration
+%         mean(vector)
+%         
+%         plot(vector)
+%         figure(2)
+%         plot(morphVector)
         break
     end
 end

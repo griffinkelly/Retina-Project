@@ -1,7 +1,7 @@
 function squareWave(repNum, pulseDuration,contrastLevel)
 
 
-%Screen('Preference','VisualDebugLevel',1);
+Screen('Preference','VisualDebugLevel',1);
 
 
 % Here we call some default settings for setting up Psychtoolbox

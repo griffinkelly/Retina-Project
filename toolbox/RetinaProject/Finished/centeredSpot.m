@@ -1,4 +1,4 @@
-function centeredSpot(circleSize, contrast)
+function centeredSpot(circleSize, contrast, repNum, pulseDuration,positionArray)
 
 
 if nargin < 1 || isempty(circleSize)
@@ -9,9 +9,18 @@ if nargin < 2 || isempty(contrast)
     
     contrast=1; 
 end
+if nargin < 3 || isempty(repNum)
+    
+    repNum=2; 
+end
+if nargin < 4 || isempty(pulseDuration)
+    
+    pulseDuration=1; 
+end
 
 % Here we call some default settings for setting up Psychtoolbox
 PsychDefaultSetup(2);
+Screen('Preference', 'VisualDebugLevel', 1);
 
 % Get the screen numbers
 screens = Screen('Screens');
@@ -29,11 +38,20 @@ grey= white / 2;
 % Get the size of the on screen wind  ow
 [screenXpixels, screenYpixels] = Screen('WindowSize', window);
 
+
+if nargin < 5 || isempty(positionArray)
+    
+   [xCenter,yCenter]=RectCenter(windowRect);
+else
+   xCenter=positionArray(1);
+   yCenter=positionArray(2);
+end
+
 % Get the centre coordinate of the window
-[xCenter, yCenter] = RectCenter(windowRect);
+%[xCenter, yCenter] = RectCenter(windowRect);
 
 % Make a base Rect of 200 by 250 pixels
-baseRect = [0 0 200 200];
+baseRect = [0 0 50 50];
 baseRect = baseRect *circleSize;
 
 % For Ovals we set a miximum diameter up to which it is perfect for
@@ -56,13 +74,13 @@ topPriorityLevel = MaxPriority(window);
 
 % Length of time and number of frames we will use for each drawing test
 
-numFrames = round(2 / ifi);
+numFrames = round(pulseDuration / ifi);
 
 % Numer of frames to wait when specifying good timing
 waitframes = 1;
 KbStrokeWait;
 
-for totalRepeats = 1: 2
+for totalRepeats = 1: repNum
 
 % Here we do exactly the same as the second example, but we additionally
 % first set the PTB prority level to maximum. This means PTB will take
