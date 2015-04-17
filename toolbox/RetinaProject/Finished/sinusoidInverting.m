@@ -1,4 +1,4 @@
- function sinusoidInverting(morphType, showMaskOnly)
+ function sinusoidInverting(morphType, showMaskOnly, degree, hertz, amplitude)
 % SimpleImageMixingDemo([morphType=gaussian][, showMaskOnly=0])
 %
 % This is a simple demonstration of shader use to morph two images/textures 
@@ -22,13 +22,21 @@ PsychDefaultSetup(2);
 
 if nargin < 1 || isempty(morphType)
     % decide whether you want a ramp or a gaussian
-    morphType = 'gaussian'; % 'ramp' or 'gaussian'
+    morphType = 'ramp'; % 'ramp' or 'gaussian'
 end
 
 if nargin < 2 || isempty(showMaskOnly)
     showMaskOnly = 0;
 end
-
+if nargin < 3 || isempty(degree)
+    degree = 0;
+end
+if nargin < 4 || isempty(hertz)
+    hertz = 0.01;
+end
+if nargin < 5 || isempty(amplitude)
+    amplitude = .5;
+end
 % open window
 [w, wrect] = PsychImaging('OpenWindow',  max(Screen('Screens')), [0.5 0.5 0.5], []);
 [cx, xy] = RectCenter(wrect);
@@ -42,19 +50,16 @@ masktex = Screen('OpenOffscreenWindow', w, [0 0 0 0]);
 
 
 % -- make textures -- %
-mat1 = imread(imageFile); % nice bunnies
-mat2 = rand(size(mat1)); % random noise
-
-    s=min(1000, 1000) / 6;
+    s=min(2000, 2000 ) / 6;
 	[x,y]=meshgrid(-s:s-1, -s:s-1);
-	angle=0*pi/180; % 30 deg orientation.
+	angle=degree*pi/180; % 30 deg orientation.
 	f=0.01*2*pi; % cycles/pixel
     a=cos(angle)*f;
 	b=sin(angle)*f;
                 
     % Build grating texture:
-    m=sin(a*x+b*y);
-     m2=-sin(a*x+b*y);
+    m=amplitude*sin(a*x+b*y);
+     m2=-amplitude*sin(a*x+b*y);
 
 
 
@@ -103,7 +108,7 @@ while 1
     % for simplicity: sine modulation
     % morph values range from 0 (image A) to 2 (image B)
     % 1 corresponds to intermediate stage
-    morphValue =  0.5*(sin(0.01*c))+.5;
+    morphValue =  0.5*(sin(hertz*c))+.5;
     morphVector = [morphVector, morphValue];
     % A mask morphing from all-zero to a gauss blob to all-one and back:
     if morphValue < 1.0  

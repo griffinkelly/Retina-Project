@@ -353,11 +353,25 @@ while keepdisplay
 
         % Increase our frame counter:
 %        count = count + 1;
+    telapsed = GetSecs - tstart;
+    
+    if telapsed>10
+        Screen('CloseAll');
+		str = sprintf('%d, %d, %d', int_amplitude, rectSize, scale);
+		disp(str);
+%		psychrethrow(psychlasterror);
+		break
+    end
+
+    
+    
+    
 end
 
     % We're done: Output average framerate:
-%    telapsed = GetSecs - tstart
-%    updaterate = count / telapsed
+    %telapsed2 = GetSecs - tstart
+    %updaterate = count / telapsed
+    
     
     % Done. Close Screen, release all ressouces:
 %    Screen('CloseAll');

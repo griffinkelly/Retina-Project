@@ -1,4 +1,4 @@
-function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, internalRotation)
+function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, internalRotation, contrast)
 % function MyStimulator([angle=0][, cyclespersecond=1][, gratingwidth=360][, gratingsize=2400][, internalRotation=0])
 % ___________________________________________________________________
 %
@@ -53,6 +53,10 @@ AssertOpenGL;
 
 % Initial stimulus parameters for the grating patch:
 
+if nargin < 6 || isempty(contrast)
+    contrast = 0.5;
+end
+
 if nargin < 5 || isempty(internalRotation)
     internalRotation = 0;
 end
@@ -95,7 +99,7 @@ end
 % the sine wave up to 1 = maximum white in the maxima. Amplitudes of more
 % than 0.5 don't make sense, as parts of the grating would lie outside the
 % displayable range for your computers displays:
-amplitude = 0.5;
+amplitude = contrast;
 
 % Choose screen with maximum id - the secondary display on a dual-display
 % setup for display:

@@ -1,6 +1,14 @@
- % Clear the workspace
-close all;
-clear all;
+function centeredSpot(circleSize, contrast)
+
+
+if nargin < 1 || isempty(circleSize)
+    
+    circleSize=1; 
+end
+if nargin < 2 || isempty(contrast)
+    
+    contrast=1; 
+end
 
 % Here we call some default settings for setting up Psychtoolbox
 PsychDefaultSetup(2);
@@ -14,11 +22,11 @@ screenNumber = max(screens);
 % Define black and white
 white = WhiteIndex(screenNumber);
 black = BlackIndex(screenNumber);
-
+grey= white / 2;
 % Open an on screen window
 [window, windowRect] = PsychImaging('OpenWindow', screenNumber, black);
 
-% Get the size of the on screen window
+% Get the size of the on screen wind  ow
 [screenXpixels, screenYpixels] = Screen('WindowSize', window);
 
 % Get the centre coordinate of the window
@@ -26,17 +34,19 @@ black = BlackIndex(screenNumber);
 
 % Make a base Rect of 200 by 250 pixels
 baseRect = [0 0 200 200];
-  
+baseRect = baseRect *circleSize;
+
 % For Ovals we set a miximum diameter up to which it is perfect for
 maxDiameter = max(baseRect) * 1.00;
 
 % Center the rectangle on the centre of the screen
 centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
 
-% Set the color of the rect to red
-rectColor = [1 0 0];
-rectColor2 = [0 1 0];
-
+amplitude = white-(contrast*white);
+amp_number = amplitude/2;
+% Set the color of the rect to red  
+rectColor = white-amp_number;
+rectColor2 = amp_number;
 
 
 ifi = Screen('GetFlipInterval', window);
@@ -102,3 +112,4 @@ KbStrokeWait;
 
 % Clear the screen
 sca;
+end
