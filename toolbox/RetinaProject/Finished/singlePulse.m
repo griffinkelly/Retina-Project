@@ -25,7 +25,10 @@ black = BlackIndex(screenNumber);
 % Do a simply calculation to calculate the luminance value for grey. This
 % will be half the luminace values for white
 grey= white / 2;
-contrast = ((white/6)*contrastLevel)
+contrastLevel=contrastLevel/100;
+amplitude = white-(contrastLevel*white);
+amp_number = amplitude/2;
+contrast = white-amp_number;
  HideCursor;
 
 % Open an on screen window using PsychImaging and color it grey.
@@ -61,7 +64,7 @@ restInterval = round(restBefore / ifi);
 restIntervalAfter = round(restAfter / ifi);
 % Numer of frames to wait when specifying good timing
 waitframes = 1;
-KbStrokeWait;
+%KbStrokeWait;
 
 for totalRepeats = 1: repNum
 
@@ -123,7 +126,7 @@ Priority(0);
 end
 
 [window, windowRect] = PsychImaging('OpenWindow', screenNumber, black);
-KbStrokeWait;
+%KbStrokeWait;
 
 
 % Clear the screen.

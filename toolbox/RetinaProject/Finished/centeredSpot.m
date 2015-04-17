@@ -7,7 +7,7 @@ if nargin < 1 || isempty(circleSize)
 end
 if nargin < 2 || isempty(contrast)
     
-    contrast=1; 
+    contrast=100; 
 end
 if nargin < 3 || isempty(repNum)
     
@@ -17,7 +17,7 @@ if nargin < 4 || isempty(pulseDuration)
     
     pulseDuration=1; 
 end
-
+contrast=contrast/100;
 % Here we call some default settings for setting up Psychtoolbox
 PsychDefaultSetup(2);
 Screen('Preference', 'VisualDebugLevel', 1);
@@ -78,7 +78,7 @@ numFrames = round(pulseDuration / ifi);
 
 % Numer of frames to wait when specifying good timing
 waitframes = 1;
-KbStrokeWait;
+%KbStrokeWait;
 
 for totalRepeats = 1: repNum
 
@@ -126,7 +126,7 @@ end
 
 
 % Wait for a key press
-KbStrokeWait;
+%KbStrokeWait;
 
 % Clear the screen
 sca;

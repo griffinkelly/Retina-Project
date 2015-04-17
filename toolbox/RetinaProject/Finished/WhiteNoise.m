@@ -80,7 +80,7 @@ if nargin < 4 || isempty(duration)
     duration = 10; 
 end
 if nargin < 5 || isempty(int_amplitude)
-    int_amplitude = 1; % Synchronize to vertical retrace by default.
+    int_amplitude = 100; % Synchronize to vertical retrace by default.
 end
 
 if nargin < 6 || isempty(syncToVBL)
@@ -128,7 +128,7 @@ keepdisplay = 1;
 %int_amplitude = 1;
 maxSize = 1080;
 minpixel = 1;
-
+int_amplitude=(int_amplitude/100);
 %circlecolors = [255 0 0 ; 0 255 0; 0 0 255];
 
 try
@@ -367,7 +367,7 @@ while keepdisplay
     if telapsed>duration
         Screen('CloseAll');
 		str = sprintf('%d, %d, %d', rectSize, scale, int_amplitude);
-	x	disp(str);
+		disp(str);
 %		psychrethrow(psychlasterror);
 		break
     end

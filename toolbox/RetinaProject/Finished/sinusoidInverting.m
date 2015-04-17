@@ -1,4 +1,4 @@
- function sinusoidInverting(morphType, showMaskOnly, degree, hertz, amplitude,duration)
+ function sinusoidInverting(morphType, showMaskOnly, degree, hertz, amplitude, duration, width)
 % SimpleImageMixingDemo([morphType=gaussian][, showMaskOnly=0])
 %
 % This is a simple demonstration of shader use to morph two images/textures 
@@ -29,16 +29,16 @@ if nargin < 3 || isempty(degree)
     degree = 0;
 end
 if nargin < 4 || isempty(hertz)
-    hertz = 0.01;
+    hertz = 0.03;
 end
 if nargin < 5 || isempty(amplitude)
-    amplitude = .5;
+    amplitude = 100;
 end
 if nargin < 6 || isempty(duration)
-    duration = 2000;
+    duration = 100;
 end
 if nargin < 7 || isempty(width)
-    width = 0.01 ;
+    width = 100 ;
 end
 % open window
 Screen('Preference', 'VisualDebugLevel', 1);
@@ -51,7 +51,7 @@ Screen('TextSize', w, 20)
 % this to define the alpha/mixing weight channel used to later mix
 % two images together:
 masktex = Screen('OpenOffscreenWindow', w, [0 0 0 0]);
-
+width=(1/width);
 
 % -- make textures -- %
     s=min(2000, 2000 ) / 6;
@@ -60,15 +60,16 @@ masktex = Screen('OpenOffscreenWindow', w, [0 0 0 0]);
 	f=width *2*pi; % cycles/pixel
     a=cos(angle)*f;
 	b=sin(angle)*f;
-                
+    
+    amplitude = amplitude/100;
     % Build grating texture:
-    m=amplitude*sin(a*x+b*y);
-     m2=-amplitude*sin(a*x+b*y);
+    m=amplitude*sin(a*x+b*y)+.5;
+     m2=-amplitude*sin(a*x+b*y)+.5;
 
 
 
-tex1 = Screen('MakeTexture', w, m2,[],[],2);
-tex2 = Screen('MakeTexture', w, m,[],[],2   ); % white background
+tex1 = Screen('MakeTexture', w, m2,[],[], 2);
+tex2 = Screen('MakeTexture', w, m,[],[], 2); % white background
 
 
 % Create a shader that allows to combine the up to four input channels
@@ -101,6 +102,7 @@ morphTex = Screen('MakeTexture', w, morphPattern, [], [], [], [], minimorphshade
 c = 1;
 vector=[];
 morphVector=[];
+tstart = GetSecs;
 while 1
     
     % check keyboard:
@@ -164,13 +166,11 @@ while 1
     Screen('Flip', w);
     
     c = c+1; % update the count
-    if length(vector) == duration
-%         mean(vector)
-%         
-%         plot(vector)
-%         figure(2)
-%         plot(morphVector)
-        break
+    telapsed = GetSecs - tstart;
+    
+    if telapsed>duration
+        disp(telapsed);
+		break
     end
 end
 

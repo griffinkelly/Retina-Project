@@ -1,4 +1,4 @@
-function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, internalRotation, contrast)
+function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, internalRotation, contrast, duration)
 % function MyStimulator([angle=0][, cyclespersecond=1][, gratingwidth=360][, gratingsize=2400][, internalRotation=0])
 % ___________________________________________________________________
 %
@@ -52,9 +52,11 @@ function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, 
 AssertOpenGL;
 
 % Initial stimulus parameters for the grating patch:
-
+if nargin < 7 || isempty(duration)
+    duration = 10;
+end
 if nargin < 6 || isempty(contrast)
-    contrast = 0.5;
+    contrast = 100;
 end
 
 if nargin < 5 || isempty(internalRotation)
@@ -89,7 +91,7 @@ if nargin < 1 || isempty(angle)
     % Tilt angle of the grating:
     angle = 0;
 end
-Screen('Preference', 'VisualDebugLevel', 1);
+Screen('Preference', 'VisualDebugLevel', 3);
 % Amplitude of the grating in units of absolute display intensity range: A
 % setting of 0.5 means that the grating will extend over a range from -0.5
 % up to 0.5, i.e., it will cover a total range of 1.0 == 100% of the total
@@ -99,6 +101,7 @@ Screen('Preference', 'VisualDebugLevel', 1);
 % the sine wave up to 1 = maximum white in the maxima. Amplitudes of more
 % than 0.5 don't make sense, as parts of the grating would lie outside the
 % displayable range for your computers displays:
+contrast = contrast/200;
 amplitude = contrast;
 
 % Choose screen with maximum id - the secondary display on a dual-display
@@ -153,6 +156,7 @@ black = BlackIndex(win);
 white = WhiteIndex(win);
 
 keepdisplay = 1;
+tstart = GetSecs;
 
 while keepdisplay
 		[keydown, secs, keycode, deltasexcs] = KbCheck;
@@ -264,13 +268,19 @@ while keepdisplay
 				Screen('FillRect', win, black);
 				Screen(win, 'Flip');
 				WaitSecs(1);
-				Screen('FillRect', win, white);
+				Screen('FillRect', win, whitexx);
 				Screen(win, 'Flip');
 				WaitSecs(1);
 			end	
 		KbReleaseWait;
 
-	end
+    end
+    
+    telapsed = GetSecs - tstart;
+    
+    if telapsed>duration
+        break
+    end
 end
 
 %if key ~= exitkey 
