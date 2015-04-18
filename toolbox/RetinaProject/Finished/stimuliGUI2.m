@@ -22,7 +22,7 @@ function varargout = stimuliGUI2(varargin)
 
 % Edit the above text to modify the response to help stimuliGUI2
 
-% Last Modified by GUIDE v2.5 17-Apr-2015 13:37:04
+% Last Modified by GUIDE v2.5 17-Apr-2015 19:54:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -53,12 +53,14 @@ function stimuliGUI2_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to stimuliGUI2 (see VARARGIN)
 
 % Choose default command line output for stimuliGUI2
+% Default to having only pulse open, all other menus should be closed
 handles.output = hObject;
 set(handles.uipanel3, 'Visible','off');
 set(handles.uipanel4, 'Visible','off');
    set(handles.uipanel5, 'Visible','off');
       set(handles.uipanel6, 'Visible','off');
       set(handles.uipanel7, 'Visible','off');
+       set(handles.uipanel9, 'Visible','off');
 % Update handles structure
 guidata(hObject, handles);
 
@@ -96,6 +98,7 @@ case 'Pulse' % User selects Pulse.
       set(handles.uipanel6, 'Visible','off');
    set(handles.uipanel3, 'Visible','off');
    set(handles.uipanel7, 'Visible','off');
+    set(handles.uipanel9, 'Visible','off');
 case 'Square Wave' % User selects Square Wave.
    set(handles.uipanel1, 'Visible','off');
    set(handles.uipanel4, 'Visible','off');
@@ -103,34 +106,48 @@ case 'Square Wave' % User selects Square Wave.
       set(handles.uipanel6, 'Visible','off');
    set(handles.uipanel3, 'Visible','on');
    set(handles.uipanel7, 'Visible','off');
-case 'Directional Sinusoid' % User selects Square Wave.
+    set(handles.uipanel9, 'Visible','off');
+case 'Directional Sinusoid' % User selects Sinusoid.
    set(handles.uipanel1, 'Visible','off');
     set(handles.uipanel3, 'Visible','off');
      set(handles.uipanel5, 'Visible','off');
         set(handles.uipanel6, 'Visible','off');
    set(handles.uipanel4, 'Visible','on');
    set(handles.uipanel7, 'Visible','off');
-case 'Inverting Sinusoid' % User selects Square Wave.
+    set(handles.uipanel9, 'Visible','off');
+case 'Inverting Sinusoid' % User selects Inverting Sine.
    set(handles.uipanel1, 'Visible','off');
     set(handles.uipanel3, 'Visible','off');
     set(handles.uipanel4, 'Visible','off');
    set(handles.uipanel5, 'Visible','on');
    set(handles.uipanel6, 'Visible','off');
    set(handles.uipanel7, 'Visible','off');
-case 'White Noise Color' % User selects Square Wave.
+    set(handles.uipanel9, 'Visible','off');
+case 'White Noise Color' % User selects WN Color.
    set(handles.uipanel1, 'Visible','off');
     set(handles.uipanel3, 'Visible','off');
     set(handles.uipanel4, 'Visible','off');
     set(handles.uipanel5, 'Visible','off');
    set(handles.uipanel6, 'Visible','on');
    set(handles.uipanel7, 'Visible','off');
-   case 'Centered Spot' % User selects Square Wave.
+    set(handles.uipanel9, 'Visible','off');
+   case 'Centered Spot' % User selects Centered Spot.
    set(handles.uipanel1, 'Visible','off');
     set(handles.uipanel3, 'Visible','off');
     set(handles.uipanel4, 'Visible','off');
     set(handles.uipanel5, 'Visible','off');
    set(handles.uipanel7, 'Visible','on');
    set(handles.uipanel6, 'Visible','off');
+    set(handles.uipanel9, 'Visible','off');
+   
+case 'Moving Bars' % User selects Moving Bars.
+   set(handles.uipanel1, 'Visible','off');
+    set(handles.uipanel3, 'Visible','off');
+    set(handles.uipanel4, 'Visible','off');
+    set(handles.uipanel5, 'Visible','off');
+   set(handles.uipanel7, 'Visible','off');
+    set(handles.uipanel6, 'Visible','off');
+    set(handles.uipanel9, 'Visible','on');
 end
 
 % --- Executes during object creation, after setting all properties.
@@ -243,6 +260,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% Code for Pulse GUI
 repNumber=get(handles.edit1, 'String');
 repNumber=str2num(repNumber);
 pulseDuration=get(handles.edit2, 'String');
@@ -330,6 +348,7 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% Code for Square Wave GUI
 repNumber=get(handles.edit9, 'String');
 repNumber=str2num(repNumber);
 pulseDuration=get(handles.edit10, 'String');
@@ -413,6 +432,7 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% Code for Directional Sinusoid GUI Panel
 driftAngle=get(handles.edit13, 'String');
 driftAngle=str2num(driftAngle);
 driftSpeed=get(handles.edit14, 'String');
@@ -548,6 +568,7 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+%Code for Inverting Sinusoid GUI Panel
 driftAngle=get(handles.edit17, 'String');
 driftAngle=str2num(driftAngle);
 driftSpeed=get(handles.edit18, 'String');
@@ -682,7 +703,7 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+%Code for White Noise GUI Panel
 squareSize=get(handles.edit21, 'String');
 squareSize=str2num(squareSize);
 scale=get(handles.edit22, 'String');
@@ -817,7 +838,7 @@ function pushbutton7_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton7 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+%Code for Centered Spot GUI Panel
 circleSize=get(handles.edit25, 'String');
 circleSize=str2num(circleSize);
 
@@ -920,6 +941,40 @@ function edit29_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function edit29_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit29 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton9.
+function pushbutton9_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+%Code for Moving Bars GUI Panel
+number=get(handles.edit37, 'String');
+number=str2num(number);
+movingBars(number);
+
+
+
+function edit37_Callback(hObject, eventdata, handles)
+% hObject    handle to edit37 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit37 as text
+%        str2double(get(hObject,'String')) returns contents of edit37 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit37_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit37 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
