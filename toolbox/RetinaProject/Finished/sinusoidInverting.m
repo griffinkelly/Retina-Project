@@ -1,4 +1,4 @@
- function sinusoidInverting(morphType, showMaskOnly, degree, hertz, amplitude, duration, width)
+   function sinusoidInverting(morphType, showMaskOnly, degree, hertz, amplitude, duration, width, horizontal_position)
 % SimpleImageMixingDemo([morphType=gaussian][, showMaskOnly=0])
 %
 % This is a simple demonstration of shader use to morph two images/textures 
@@ -40,6 +40,10 @@ end
 if nargin < 7 || isempty(width)
     width = 100 ;
 end
+if nargin < 8 || isempty(horizontal_position)
+    horizontal_position = 0;
+end
+
 % open window
 Screen('Preference', 'VisualDebugLevel', 1);
 [w, wrect] = PsychImaging('OpenWindow',  max(Screen('Screens')), [0.5 0.5 0.5], []);
@@ -114,7 +118,7 @@ while 1
     % for simplicity: sine modulation
     % morph values range from 0 (image A) to 2 (image B)
     % 1 corresponds to intermediate stage
-    morphValue =  0.5*(sin(hertz*c))+.5;
+    morphValue =  0.5*(sin(hertz*c+horizontal_position))+.5 ;
     morphVector = [morphVector, morphValue];
     % A mask morphing from all-zero to a gauss blob to all-one and back:
     if morphValue < 1.0  
@@ -160,10 +164,10 @@ while 1
     end
     
     % show morphing stage as value:
-    myString = sprintf('morph stage 0 to 2: %1.1f ', morphValue);
-    DrawFormattedText(w, myString, 0, 0, [1 0 0 ]);
+    %myString = sprintf('morph stage 0 to 2: %1.1f ', morphValue);
+    %DrawFormattedText(w, myString, 0, 0, [1 0 0 ]);
     
-    Screen('Flip', w);
+    Screen('Flip', w); 
     
     c = c+1; % update the count
     telapsed = GetSecs - tstart;

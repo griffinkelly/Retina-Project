@@ -1,4 +1,4 @@
-function WhiteNoise(numRects, rectSize, scale, duration, int_amplitude, syncToVBL, dontclear)
+function WhiteNoise(numRects, rectSize, scale, duration, int_amplitude, syncToVBL, dontclear, color_choice)
 % MyWhiteNoise([numRects=1][, rectSize=128][, scale=1][, syncToVBL=1][, dontclear=0])
 %
 % Demonstrates how to generate and draw noise patches on-the-fly in a fast way. Can be
@@ -97,6 +97,9 @@ if nargin < 7 || isempty(dontclear)
     dontclear = 0; % Clear backbuffer to background color by default after each bufferswap.
 end
 
+if nargin <8 || isempty(color_choice)
+    color_choice = 'color';
+end
 
 if dontclear > 0
     % A value of 2 will prevent any change to the backbuffer after a
@@ -130,6 +133,27 @@ maxSize = 1080;
 minpixel = 1;
 int_amplitude=(int_amplitude/100);
 %circlecolors = [255 0 0 ; 0 255 0; 0 0 255];
+
+    
+
+if strcmp(color_choice,'blue')==1
+    blue = 255;
+    green = 0;
+    red = 0;
+elseif strcmp(color_choice, 'blue/green')==1
+    blue = 255;
+    green = 255;
+    red = 0;
+elseif strcmp(color_choice, 'green')==1
+    blue = 0;
+    green = 255;
+    red = 0;
+elseif strcmp(color_choice, 'color')==1
+    blue = 255;
+    green = 255;
+    red = 255;
+end
+    
 
 try
     % Find screen with maximal index:
@@ -186,9 +210,10 @@ while keepdisplay
 %			noiseimg(:, :, 1) =int_amplitude*(rand(rectSize, rectSize));
 %			noiseimg(:, :, 2) =int_amplitude*(rand(rectSize, rectSize));
 %			noiseimg(:, :, 3) =int_amplitude*(rand(rectSize, rectSize));
-			noiseimg(:, :, 3) =uint8(int_amplitude*(round(rand(rectSize, rectSize))*255));
-			noiseimg(:, :, 2) =uint8(int_amplitude*(round(rand(rectSize, rectSize))*255));
-			noiseimg(:, :, 1) =uint8(int_amplitude*(round(rand(rectSize, rectSize))*0));
+			noiseimg(:, :, 3) =uint8(int_amplitude*(round(rand(rectSize, rectSize))*blue));
+			noiseimg(:, :, 2) =uint8(int_amplitude*(round(rand(rectSize, rectSize))*green));
+			noiseimg(:, :, 1) =uint8(int_amplitude*(round(rand(rectSize, rectSize))*red));
+            
 %			noiseixmg=(int_amplitude*(floor(2*rand(rectSize, rectSize))*2-1) + 128); 
 %			noiseimg=(int_amplitude*floor(3*rand(rectSize, rectSize)-1) + 128);
             % Convert it to a texture 'tex':
