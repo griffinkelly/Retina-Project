@@ -109,7 +109,10 @@ else
 end
 morphTex = Screen('MakeTexture', w, morphPattern, [], [], [], [], minimorphshader);
 
-
+baseRect = [0 0 50 50];
+[screenXpixels, screenYpixels] = Screen('WindowSize', w);
+corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
+maxDiameter = max(baseRect) * 1.00;
 
 c = 1;
 vector=[];
@@ -174,7 +177,7 @@ while 1
     % show morphing stage as value:
     %myString = sprintf('morph stage 0 to 2: %1.1f ', morphValue);
     %DrawFormattedText(w, myString, 0, 0, [1 0 0 ]);
-    
+    Screen('FrameRect', w, [255 0 0], corner, maxDiameter);
     Screen('Flip', w); 
     
     c = c+1; % update the count

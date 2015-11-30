@@ -55,6 +55,8 @@ spacekey = KbName('space');
 
 % Make a base Rect of 200 by 250 pixels
 baseRect = [0 0 50 50];
+baseSquare = [0 0 50 50];
+maxSquare = max(baseSquare);
 baseRect = baseRect *circleSize;
 
 % For Ovals we set a miximum diameter up to which it is perfect for
@@ -63,6 +65,7 @@ maxDiameter = max(baseRect) * 1.00;
 % Center the rectangle on the centre of the screen
 centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
 
+corner = CenterRectOnPointd(baseSquare, screenXpixels, screenYpixels);
 amplitude = white-(contrast*white);
 amp_number = amplitude/2;
 % Set the color of the rect to red  
@@ -92,6 +95,7 @@ for totalRepeats = 1: repNum
 % critical code in order to allow other processes to run.
 Priority(topPriorityLevel);
 vbl = Screen('Flip', window);
+Screen('FrameRect', window, [255 0 0], corner, maxSquare);
 for frame = 1:numFrames
     [keydown, secs, keycode, deltasexcs] = KbCheck;
     KbReleaseWait;
@@ -99,10 +103,9 @@ for frame = 1:numFrames
         Screen('CloseAll');
         return
     end
-
+Screen('FrameRect', window, [255 0 0], corner, maxSquare);
 % Draw the rect to the screen
 Screen('FillOval', window, rectColor, centeredRect, maxDiameter);
-
     % Flip to the screen
     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
 
@@ -115,8 +118,9 @@ Priority(0);
 % acheive good timing.
 Priority(topPriorityLevel);
 vbl = Screen('Flip', window);
+Screen('FrameRect', window, [255 0 0], corner, maxSquare);
 for frame = 1:numFrames    
-
+Screen('FrameRect', window, [255 0 0], corner, maxSquare);
 % Draw the rect to the screen
 Screen('FillOval', window, rectColor2, centeredRect, maxDiameter);
 

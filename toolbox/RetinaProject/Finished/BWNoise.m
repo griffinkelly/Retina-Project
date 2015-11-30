@@ -287,7 +287,7 @@ while keepdisplay
             end
             if keycode(exitkey)
                 break
-                endxxx
+            end
             
 			objRect = SetRect(0,0, rectSize, rectSize);
 			dstRect(i,:)=CenterRectOnPoint(objRect * scale, xc, yc);

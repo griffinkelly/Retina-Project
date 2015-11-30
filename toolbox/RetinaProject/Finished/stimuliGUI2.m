@@ -22,7 +22,7 @@ function varargout = stimuliGUI2(varargin)
 
 % Edit the above text to modify the response to help stimuliGUI2
 
-% Last Modified by GUIDE v2.5 08-Jun-2015 17:03:24
+% Last Modified by GUIDE v2.5 30-Nov-2015 17:09:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,6 +51,10 @@ function stimuliGUI2_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to stimuliGUI2 (see VARARGIN)
+%Create a text File
+
+fid = fopen( 'stimulus_record.txt', 'wt' );
+
 
 % Choose default command line output for stimuliGUI2
 % Default to having only pulse open, all other menus should be closed
@@ -61,6 +65,7 @@ set(handles.uipanel4, 'Visible','off');
       set(handles.uipanel6, 'Visible','off');
       set(handles.uipanel7, 'Visible','off');
        set(handles.uipanel9, 'Visible','off');
+       set(handles.uipanel10, 'Visible','off');
 % Update handles structure
 guidata(hObject, handles);
 
@@ -99,6 +104,7 @@ case 'Pulse' % User selects Pulse.
    set(handles.uipanel3, 'Visible','off');
    set(handles.uipanel7, 'Visible','off');
     set(handles.uipanel9, 'Visible','off');
+    set(handles.uipanel10, 'Visible','off');
 case 'Square Wave' % User selects Square Wave.
    set(handles.uipanel1, 'Visible','off');
    set(handles.uipanel4, 'Visible','off');
@@ -107,6 +113,7 @@ case 'Square Wave' % User selects Square Wave.
    set(handles.uipanel3, 'Visible','on');
    set(handles.uipanel7, 'Visible','off');
     set(handles.uipanel9, 'Visible','off');
+    set(handles.uipanel10, 'Visible','off');
 case 'Directional Sinusoid' % User selects Sinusoid.
    set(handles.uipanel1, 'Visible','off');
     set(handles.uipanel3, 'Visible','off');
@@ -115,6 +122,7 @@ case 'Directional Sinusoid' % User selects Sinusoid.
    set(handles.uipanel4, 'Visible','on');
    set(handles.uipanel7, 'Visible','off');
     set(handles.uipanel9, 'Visible','off');
+    set(handles.uipanel10, 'Visible','off');
 case 'Inverting Sinusoid' % User selects Inverting Sine.
    set(handles.uipanel1, 'Visible','off');
     set(handles.uipanel3, 'Visible','off');
@@ -123,6 +131,7 @@ case 'Inverting Sinusoid' % User selects Inverting Sine.
    set(handles.uipanel6, 'Visible','off');
    set(handles.uipanel7, 'Visible','off');
     set(handles.uipanel9, 'Visible','off');
+    set(handles.uipanel10, 'Visible','off');
 case 'White Noise Color' % User selects WN Color.
    set(handles.uipanel1, 'Visible','off');
     set(handles.uipanel3, 'Visible','off');
@@ -131,6 +140,7 @@ case 'White Noise Color' % User selects WN Color.
    set(handles.uipanel6, 'Visible','on');
    set(handles.uipanel7, 'Visible','off');
     set(handles.uipanel9, 'Visible','off');
+    set(handles.uipanel10, 'Visible','off');
    case 'Centered Spot' % User selects Centered Spot.
    set(handles.uipanel1, 'Visible','off');
     set(handles.uipanel3, 'Visible','off');
@@ -139,7 +149,7 @@ case 'White Noise Color' % User selects WN Color.
    set(handles.uipanel7, 'Visible','on');
    set(handles.uipanel6, 'Visible','off');
     set(handles.uipanel9, 'Visible','off');
-   
+   set(handles.uipanel10, 'Visible','off');
 case 'Moving Bars' % User selects Moving Bars.
    set(handles.uipanel1, 'Visible','off');
     set(handles.uipanel3, 'Visible','off');
@@ -147,7 +157,18 @@ case 'Moving Bars' % User selects Moving Bars.
     set(handles.uipanel5, 'Visible','off');
    set(handles.uipanel7, 'Visible','off');
     set(handles.uipanel6, 'Visible','off');
+    set(handles.uipanel10, 'Visible','off');
     set(handles.uipanel9, 'Visible','on');
+    
+case 'White Noise BW' % User selects Moving Bars.
+   set(handles.uipanel1, 'Visible','off');
+    set(handles.uipanel3, 'Visible','off');
+    set(handles.uipanel4, 'Visible','off');
+    set(handles.uipanel5, 'Visible','off');
+   set(handles.uipanel7, 'Visible','off');
+    set(handles.uipanel6, 'Visible','off');
+    set(handles.uipanel9, 'Visible','off');
+    set(handles.uipanel10, 'Visible','on');
 end
 
 % --- Executes during object creation, after setting all properties.
@@ -272,6 +293,11 @@ restAfter=str2num(restAfter);
 contrastLevel=get(handles.popupmenu2, 'String');
 val = get(handles.popupmenu2,'Value');
 contrast=str2num(contrastLevel{val});
+
+fid = fopen('stimulus_record.txt','at');
+fprintf(fid, '%s, Single Pulse:%f,%f,%f,%f,%f\r\n',datestr(now),repNumber, pulseDuration, restBefore, restAfter,contrast)
+fclose(fid);
+
 singlePulse(repNumber, pulseDuration, restBefore, restAfter,contrast);
 
 % --- Executes on selection change in popupmenu2.
@@ -356,7 +382,12 @@ pulseDuration=str2num(pulseDuration);
 contrastLevel=get(handles.popupmenu5, 'String');
 val = get(handles.popupmenu5,'Value');
 contrast=str2num(contrastLevel{val});
+
+fid = fopen('stimulus_record.txt','at');
+fprintf(fid, '%s, Square Wave:%f,%f,%f\r\n',datestr(now),repNumber, pulseDuration,contrast)
+fclose(fid);
 squareWave(repNumber, pulseDuration,contrast);
+
 
 % --- Executes on selection change in popupmenu5.
 function popupmenu5_Callback(hObject, eventdata, handles)
@@ -444,7 +475,9 @@ val = get(handles.popupmenu6,'Value');
 contrast=str2num(contrastLevel{val});
 duration=get(handles.edit16, 'String');
 duration=str2num(duration);
-
+fid = fopen('stimulus_record.txt','at');
+fprintf(fid, '%s, Directional Sinusoid:%f,%f,%f,%f, %f \r\n',datestr(now),driftAngle,-driftSpeed,gratingwidth,contrast,duration)
+fclose(fid);
 directionalSinusoid(driftAngle,-driftSpeed,gratingwidth,[],[],contrast,duration);
 
 
@@ -582,6 +615,9 @@ duration=get(handles.edit20, 'String');
 duration=str2num(duration);
 offset=get(handles.edit38, 'String');
 offset=str2num(offset);
+fid = fopen('stimulus_record.txt','at');
+fprintf(fid, '%s, Inverting Sinusoid:%f,%f,%f,%f %f, %f \r\n',datestr(now),driftAngle, driftSpeed, contrast, duration, gratingwidth,offset)
+fclose(fid);
 
 sinusoidInverting('ramp', 0, driftAngle, driftSpeed, contrast, duration, gratingwidth,offset)
 
@@ -718,7 +754,9 @@ duration=get(handles.edit24, 'String');
 duration=str2num(duration);
 rate=get(handles.edit39, 'String');
 rate=str2num(rate);
-
+fid = fopen('stimulus_record.txt','at');
+fprintf(fid, '%s, Colored Noise:%f,%f,%f,%f %f,\r\n',datestr(now),squareSize, scale, duration, contrast,rate)
+fclose(fid);
 seed=WhiteNoise([],[], squareSize, scale, duration, contrast,[],[],[],rate);
 
 
@@ -859,7 +897,11 @@ ypos=get(handles.edit29, 'String');
 ypos=str2num(ypos);
 positionarray=[xpos,ypos];
 %disp(ypos)
+fid = fopen('stimulus_record.txt','at');
+fprintf(fid, '%s, Centered Spot: %f,%f,%f,%f,%f\r\n',datestr(now),circleSize,contrast,reps,duration,positionarray)
+fclose(fid);
 centeredSpot(circleSize, contrast, reps, duration,positionarray)
+
 
 
 
@@ -963,7 +1005,12 @@ function pushbutton9_Callback(hObject, eventdata, handles)
 %Code for Moving Bars GUI Panel
 number=get(handles.edit37, 'String');
 number=str2num(number);
+
+fid = fopen('stimulus_record.txt','at');
+fprintf(fid, '%s, Moving Bars: %f,\r\n',datestr(now),number)
+fclose(fid);
 movingBars(number);
+
 
 
 
@@ -1025,6 +1072,137 @@ function edit39_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function edit39_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit39 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit40_Callback(hObject, eventdata, handles)
+% hObject    handle to edit40 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit40 as text
+%        str2double(get(hObject,'String')) returns contents of edit40 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit40_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit40 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit41_Callback(hObject, eventdata, handles)
+% hObject    handle to edit41 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit41 as text
+%        str2double(get(hObject,'String')) returns contents of edit41 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit41_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit41 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton10.
+function pushbutton10_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+pixelSize=get(handles.edit40, 'String');
+scale=get(handles.edit41, 'String');
+duration=get(handles.edit42, 'String');
+refresh=get(handles.edit43, 'String');
+contrastLevel=get(handles.popupmenu12, 'String');
+val = get(handles.popupmenu8,'Value');
+number=str2num(number);
+
+
+BWNoise();
+
+% --- Executes on selection change in popupmenu12.
+function popupmenu12_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu12 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu12
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu12_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit42_Callback(hObject, eventdata, handles)
+% hObject    handle to edit42 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit42 as text
+%        str2double(get(hObject,'String')) returns contents of edit42 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit42_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit42 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit43_Callback(hObject, eventdata, handles)
+% hObject    handle to edit43 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit43 as text
+%        str2double(get(hObject,'String')) returns contents of edit43 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit43_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit43 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 

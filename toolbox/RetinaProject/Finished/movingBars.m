@@ -44,6 +44,9 @@ spacekey = KbName('space');
 % Set the width for our rectangle 
 baseRect = [0 0 screenXpixels/numberofbars screenYpixels];
 
+baseRect2 = [0 0 50 50];
+corner = CenterRectOnPointd(baseRect2, screenXpixels, screenYpixels);
+maxDiameter = max(baseRect2) * 1.00;
 % Center the rectangle on the centre of the screen using fractional pixel
 % values.
 % For help see: CenterRectOnPointd
@@ -66,10 +69,12 @@ for frame = 1:timedInterval
         Screen('CloseAll');
         return
     end
+    Screen('FrameRect', window, [255 0 0], corner, maxDiameter);
     Screen('FillRect', window, white, centeredRect);               
     Screen('Flip', window);               
 
 end
+    Screen('FrameRect', window, [255 0 0], corner, maxDiameter);
     % Flip to the screen
     Screen('Flip', window);
     Screen('FillRect', window, black);               
@@ -95,11 +100,12 @@ for frame = 1:timedInterval
         Screen('CloseAll');
         return
     end
+    Screen('FrameRect', window, [255 0 0], corner, maxDiameter);
     Screen('FillRect', window, white, centeredRect);
     Screen('Flip', window);
 
 end
-
+Screen('FrameRect', window, [255 0 0], corner, maxDiameter);
 % Flip to the screen
 Screen('Flip', window);
 disp('Y Coordinate');               

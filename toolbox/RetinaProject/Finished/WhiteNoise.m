@@ -140,6 +140,7 @@ exitkey = KbName('x');
 
 %[keydown, secs, keycode, deltasecs] = KbCheck;
 
+
 keepdisplay = 1;
 %int_amplitude = 1;
 maxSize = 1080;
@@ -179,7 +180,13 @@ try
 
 	black = BlackIndex(win);
 	white = WhiteIndex(win);
-        
+    
+    
+    baseRect = [0 0 50 50];
+    [screenXpixels, screenYpixels] = Screen('WindowSize', win);
+    corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
+    maxDiameter = max(baseRect) * 1.00;
+    
     % Compute destination rectangle locations for the random noise patches:
 
     % 'objRect' is a rectangle of the size 'rectSize' by 'rectSize' pixels of
@@ -240,7 +247,7 @@ while keepdisplay
 %			noiseimg=(int_amplitude*floor(3*rand(rectSize, rectSize)-1) + 128);
             % Convert it to a texture 'tex':
             tex=Screen('MakeTexture', win, noiseimg);
-
+            
             % Draw the texture into the screen location defined by the
             % destination rectangle 'dstRect(i,:)'. If dstRect is bigger
             % than our noise image 'noiseimg', PTB will automatically
@@ -252,6 +259,7 @@ while keepdisplay
             % texture! The default bilinear filtering would introduce local
             % correlations when scaling is applied:
 			Screen('DrawTexture', win, tex, [], dstRect(i,:), [], 0);
+            Screen('FrameRect', win, [255 0 0], corner, maxDiameter);
 %			Screen('DrawTexxxture', win, tex, [], dstRect(i,:), [], 0, [0: 255: 0]);
 			
 %			Screen(win, 'Flip'); 

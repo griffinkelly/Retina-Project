@@ -151,7 +151,10 @@ decreasegratingwidth = KbName('DownArrow');
 exitkey = KbName('x');
 
 %[keydown, secs, keycode, deltasecs] = KbCheck;
-
+baseRect = [0 0 50 50];
+[screenXpixels, screenYpixels] = Screen('WindowSize', win);
+corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
+maxDiameter = max(baseRect) * 1.00;
 black = BlackIndex(win);
 white = WhiteIndex(win);
 
@@ -165,7 +168,7 @@ tstart = GetSecs;
 
 while keepdisplay
 		[keydown, secs, keycode, deltasexcs] = KbCheck;
-	
+         Screen('FrameRect', win, [0 255 255], corner, maxDiameter);
         for time = 1:timedInterval
             [keydown, secs, keycode, deltasexcs] = KbCheck;
             KbReleaseWait;
@@ -175,7 +178,9 @@ while keepdisplay
             end
             phase = phase + phaseincrement;
             freq = 1/gratingwidth;
+            
             Screen('DrawTexture', win, gratingtex, [], [], angle, [], [], [], [], rotateMode, [phase, freq, amplitude, 0]);
+            Screen('FrameRect', win, [255 0 0], corner, maxDiameter);
             vbl = Screen('Flip', win, vbl + 0.5 * ifi);    
             
         end 
@@ -192,7 +197,9 @@ while keepdisplay
                 end
              % Color the screen grey
             Screen('FillRect', win, grey);
-           vbl = Screen('Flip', win, vbl + 0.5 * ifi);  
+            Screen('FrameRect', win, [255 0 0], corner, maxDiameter);
+            vbl = Screen('Flip', win, vbl + 0.5 * ifi); 
+           
         end
         
 	if keycode(exitkey)
