@@ -155,16 +155,46 @@ exitkey = KbName('x');
 black = BlackIndex(win);
 white = WhiteIndex(win);
 
+grey= white / 2;
+
+timedInterval = round(5 / ifi);
+timedInterval2 = round(1 / ifi);
+
 keepdisplay = 1;
 tstart = GetSecs;
 
 while keepdisplay
 		[keydown, secs, keycode, deltasexcs] = KbCheck;
-		phase = phase + phaseincrement;
-		freq = 1/gratingwidth;
-		Screen('DrawTexture', win, gratingtex, [], [], angle, [], [], [], [], rotateMode, [phase, freq, amplitude, 0]);
-		vbl = Screen('Flip', win, vbl + 0.5 * ifi);
 	
+        for time = 1:timedInterval
+            [keydown, secs, keycode, deltasexcs] = KbCheck;
+            KbReleaseWait;
+            if keycode(exitkey)
+                Screen('CloseAll');
+                return
+            end
+            phase = phase + phaseincrement;
+            freq = 1/gratingwidth;
+            Screen('DrawTexture', win, gratingtex, [], [], angle, [], [], [], [], rotateMode, [phase, freq, amplitude, 0]);
+            vbl = Screen('Flip', win, vbl + 0.5 * ifi);    
+            
+        end 
+        
+        angle = angle + 5;
+		phase = phase + phaseincrement;
+        
+        for timed = 1:timedInterval2
+             [keydown, secs, keycode, deltasexcs] = KbCheck;
+                KbReleaseWait;
+                if keycode(exitkey)
+                    Screen('CloseAll');
+                    return
+                end
+             % Color the screen grey
+            Screen('FillRect', win, grey);
+           vbl = Screen('Flip', win, vbl + 0.5 * ifi);  
+        end
+        
 	if keycode(exitkey)
 		Screen('CloseAll');
 		str = sprintf('%d, %d, %d', angle, cyclespersecond, gratingwidth);

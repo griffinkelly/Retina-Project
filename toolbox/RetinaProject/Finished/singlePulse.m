@@ -81,6 +81,12 @@ for frame = 1:restIntervalAfter
 
     % Flip to the screen
     Screen('Flip', window);
+    [keydown, secs, keycode, deltasexcs] = KbCheck;
+    KbReleaseWait;
+    if keycode(exitkey)
+        Screen('CloseAll');
+        return
+    end
 
 end
 
@@ -99,6 +105,12 @@ for frame = 1:numFrames
 
     % Flip to the screen
     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+    [keydown, secs, keycode, deltasexcs] = KbCheck;
+    KbReleaseWait;
+    if keycode(exitkey)
+        Screen('CloseAll');
+        return
+    end
 
 end
 Priority(0);
@@ -119,6 +131,12 @@ for frame = 1:restInterval
 
     % Flip to the screen
     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+    [keydown, secs, keycode, deltasexcs] = KbCheck;
+    KbReleaseWait;
+    if keycode(exitkey)
+        Screen('CloseAll');
+        return
+    end
 
 end
 Priority(0);

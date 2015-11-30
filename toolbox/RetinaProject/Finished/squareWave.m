@@ -75,6 +75,12 @@ for totalRepeats = 1: repNum
 Priority(topPriorityLevel);
 vbl = Screen('Flip', window);
 for frame = 1:numFrames
+    [keydown, secs, keycode, deltasexcs] = KbCheck;
+    KbReleaseWait;
+    if keycode(exitkey)
+        Screen('CloseAll');
+        return
+    end
 
     % Color the screen white
     Screen('FillRect', window, contrast1);
@@ -92,7 +98,12 @@ Priority(0);
 Priority(topPriorityLevel);
 vbl = Screen('Flip', window);
 for frame = 1:numFrames
-
+    [keydown, secs, keycode, deltasexcs] = KbCheck;
+    KbReleaseWait;
+    if keycode(exitkey)
+        Screen('CloseAll');
+        return
+    end
     % Color the screen grey
     Screen('FillRect', window, contrast2);
 

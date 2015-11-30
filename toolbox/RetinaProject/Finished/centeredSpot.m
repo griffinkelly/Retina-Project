@@ -46,6 +46,9 @@ else
    xCenter=positionArray(1);
    yCenter=positionArray(2);
 end
+KbName('UnifyKeyNames');
+exitkey = KbName('x');
+spacekey = KbName('space');
 
 % Get the centre coordinate of the window
 %[xCenter, yCenter] = RectCenter(windowRect);
@@ -90,6 +93,12 @@ for totalRepeats = 1: repNum
 Priority(topPriorityLevel);
 vbl = Screen('Flip', window);
 for frame = 1:numFrames
+    [keydown, secs, keycode, deltasexcs] = KbCheck;
+    KbReleaseWait;
+    if keycode(exitkey)
+        Screen('CloseAll');
+        return
+    end
 
 % Draw the rect to the screen
 Screen('FillOval', window, rectColor, centeredRect, maxDiameter);
@@ -116,6 +125,12 @@ Screen('FillOval', window, rectColor2, centeredRect, maxDiameter);
 
     % Flip to the screen
     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
+    [keydown, secs, keycode, deltasexcs] = KbCheck;
+    KbReleaseWait;
+    if keycode(exitkey)
+        Screen('CloseAll');
+        return
+    end
 
 end
 Priority(0);

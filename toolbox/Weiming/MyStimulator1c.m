@@ -149,7 +149,7 @@ black = BlackIndex(win);
 white = WhiteIndex(win);
 
 keepdisplay = 1;
-
+rotateMode
 while keepdisplay
 		[keydown, secs, keycode, deltasexcs] = KbCheck;
 		phase = phase + phaseincrement;

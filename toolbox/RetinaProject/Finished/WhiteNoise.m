@@ -1,4 +1,4 @@
-function WhiteNoise(numRects, rectSize, scale, duration, int_amplitude, syncToVBL, dontclear, color_choice)
+function timeNoise = WhiteNoise(seed,numRects, rectSize, scale, duration, int_amplitude, syncToVBL, dontclear, color_choice, refresh_rate)
 % MyWhiteNoise([numRects=1][, rectSize=128][, scale=1][, syncToVBL=1][, dontclear=0])
 %
 % Demonstrates how to generate and draw noise patches on-the-fly in a fast way. Can be
@@ -65,25 +65,30 @@ AssertOpenGL;
 
 % Assign default values for all unspecified input parameters:
 
-if nargin < 1 || isempty(numRects)
+if nargin < 1 || isempty(seed)
+    seed = 0; % Draw one noise patch by default.
+end
+
+
+if nargin < 2 || isempty(numRects)
     numRects = 1; % Draw one noise patch by default.
 end
 
-if nargin < 2 || isempty(rectSize)
+if nargin < 3 || isempty(rectSize)
     rectSize = 128; % Default patch size is 128 by 128 noisels.
 end
 
-if nargin < 3 || isempty(scale)
+if nargin < 4 || isempty(scale)
     scale = 1; % Don't up- or downscale patch by default.
 end
-if nargin < 4 || isempty(duration)
+if nargin < 5 || isempty(duration)
     duration = 10; 
 end
-if nargin < 5 || isempty(int_amplitude)
+if nargin < 6 || isempty(int_amplitude)
     int_amplitude = 100; % Synchronize to vertical retrace by default.
 end
 
-if nargin < 6 || isempty(syncToVBL)
+if nargin < 7 || isempty(syncToVBL)
     syncToVBL = 1; % Synchronize to vertical retrace by default.
 end
 
@@ -93,14 +98,22 @@ else
     asyncflag = 2;
 end
 
-if nargin < 7 || isempty(dontclear)
+if nargin < 8 || isempty(dontclear)
     dontclear = 0; % Clear backbuffer to background color by default after each bufferswap.
 end
 
-if nargin <8 || isempty(color_choice)
-    color_choice = 'color';
+if nargin <9 || isempty(color_choice)
+    color_choice = 'blue/green';
 end
 
+if nargin <10 || isempty(refresh_rate)
+   refresh_rate=0;
+   hz = 0;
+   
+end
+if refresh_rate
+    hz = refresh_rate - .01;
+end
 if dontclear > 0
     % A value of 2 will prevent any change to the backbuffer after a
     % bufferswap. In that case it is your responsibility to take care of
@@ -162,7 +175,7 @@ try
     % Open fullscreen onscreen window on that screen. Background color is
     % gray, double buffering is enabled. Return a 'win'dowhandle and a
     % rectangle 'winRect' which defines the size of the window:
-    [win, winRect] = Screen('OpenWindow', screenid, 128);
+    [win, winRect] = Screen('OpenWindow', 2, 128);
 
 	black = BlackIndex(win);
 	white = WhiteIndex(win);
@@ -188,7 +201,7 @@ try
     end
 
     % Init framecounter to zero and take initial timestamp:
-    count = 0;    
+    count = 1;    
     tstart = GetSecs;
 
     % Run noise image drawing loop for 1000 frames:
@@ -200,6 +213,14 @@ while keepdisplay
 %		Screen('FillRect', win, 128);
 %		Screen(win, 'Flip');        
 		% Generate and draw 'numRects' noise images:
+        if seed
+            for i = 1:length(seed(1,1,1,:))
+                noiseimg(:, :, 3) = seed(1,1,3,i);
+                noiseimg(:, :, 2) = seed(1,1,2,i);
+                noiseimg(:, :, 1) = seed(1,1,1,i);
+            end
+        else
+       
         for i=1:numRects
             % Compute noiseimg noise image matrix with Matlab:
             % Normally distributed noise with mean 128 and stddev. 50, each
@@ -213,6 +234,7 @@ while keepdisplay
 			noiseimg(:, :, 3) =uint8(int_amplitude*(round(rand(rectSize, rectSize))*blue));
 			noiseimg(:, :, 2) =uint8(int_amplitude*(round(rand(rectSize, rectSize))*green));
 			noiseimg(:, :, 1) =uint8(int_amplitude*(round(rand(rectSize, rectSize))*red));
+          
             
 %			noiseixmg=(int_amplitude*(floor(2*rand(rectSize, rectSize))*2-1) + 128); 
 %			noiseimg=(int_amplitude*floor(3*rand(rectSize, rectSize)-1) + 128);
@@ -237,7 +259,11 @@ while keepdisplay
             % After drawing, we can discard the noise texture.
 %            Screen('Close', tex);
 %			KbReleaseWait;
+      
         end
+        end
+        pause(hz);
+         timeNoise(:,:,:,count)=noiseimg;
 %		KbReleaseWait;
   	if keycode(exitkey)
 		Screen('CloseAll');
@@ -366,7 +392,7 @@ while keepdisplay
 			end
 		KbReleaseWait;
 	elseif keycode(onoffkey)
-		while ~KbCheck
+		while ~KbChec
 				Screen('FillRect', win, black);
 				Screen(win, 'Flip');
 				pause(1);
@@ -386,7 +412,7 @@ while keepdisplay
         Screen('Flip', win, 0, dontclear, asyncflag);
 
         % Increase our frame counter:
-%        count = count + 1;
+        count = count + 1;
     telapsed = GetSecs - tstart;
     
     if telapsed>duration

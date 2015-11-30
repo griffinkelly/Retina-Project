@@ -244,6 +244,10 @@ while keepdisplay
 		for i=1:numRects
 			scale = scale - scale*0.2 ;
 			dstRect(i,:)=CenterRectOnPoint(objRect * scale, xc, yc);
+            
+            if keycode(exitkey)
+                break
+            end
 %%			noiseimg=(int_amplitude*(floor(2*rand(rectSize, rectSize))*2-1) + 128);
 %			noiseimg=(int_amplitude*floor(3*rand(rectSize, rectSize)-1) + 128);
 %			noiseimg=(int_amplitude*randn(rectSize, rectSize) + 128);
@@ -257,6 +261,9 @@ while keepdisplay
 			rectSize = rectSize + rectSize*0.25;
 			objRect = SetRect(0,0, rectSize, rectSize);
 			dstRect(i,:)=CenterRectOnPoint(objRect * scale, xc, yc);
+            if keycode(exitkey)
+                break
+            end
 %			if rectSize > maxSize
 %				objRect = SetRect(0,0, maxSize, maxSize);
 %				dstRect(i,:)=CenterRectOnPoint(objRect * scale, xc, yc);
@@ -277,7 +284,11 @@ while keepdisplay
 			rectSize = rectSize - rectSize*0.25;
 			if rectSize < minpixel
 				rectSize = minpixel;
-			end
+            end
+            if keycode(exitkey)
+                break
+                endxxx
+            
 			objRect = SetRect(0,0, rectSize, rectSize);
 			dstRect(i,:)=CenterRectOnPoint(objRect * scale, xc, yc);
 %%			noiseimg=(int_amplitude*(floor(2*rand(rectSize, rectSize))*2-1) + 128);

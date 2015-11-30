@@ -1,4 +1,4 @@
-   function sinusoidInverting(morphType, showMaskOnly, degree, hertz, amplitude, duration, width, horizontal_position)
+   function sinusoidInverting(morphType, showMaskOnly, degree, hertz, amplitude, duration, width, offset)
 % SimpleImageMixingDemo([morphType=gaussian][, showMaskOnly=0])
 %
 % This is a simple demonstration of shader use to morph two images/textures 
@@ -9,9 +9,17 @@
 % INPUTS:
 % morphType - string, either 'gaussian' or 'ramp'
 % showMaskOnly - 0/1 to either see the mask or the resulting morphing
+% Degree - Shift out of a possible 360 deg
+% Hertz - How many times it cycles per second, alternating sine waves
+% Amplitude - also contrast, but its how far in amplitude the sine wave
+% cycles out of a possible 1
+% Duration- how long the program cycles for
+% Width - width of grating
+% Offset-- horizontal offset in pixels
 %
 % Made after ImageMixingTutorial.m by Mario Kleiner
 % Written by Natalia Zaretskaya 25 Nov 2014
+% Adapted by Griffin Kelly 2015
 
 
 % Use normalized color range, ranging from 0 to 1
@@ -40,10 +48,10 @@ end
 if nargin < 7 || isempty(width)
     width = 100 ;
 end
-if nargin < 8 || isempty(horizontal_position)
-    horizontal_position = 0;
-end
 
+if nargin < 8 || isempty(offset)
+    offset = 0;
+end
 % open window
 Screen('Preference', 'VisualDebugLevel', 1);
 [w, wrect] = PsychImaging('OpenWindow',  max(Screen('Screens')), [0.5 0.5 0.5], []);
@@ -67,8 +75,8 @@ width=(1/width);
     
     amplitude = amplitude/100;
     % Build grating texture:
-    m=amplitude*sin(a*x+b*y)+.5;
-     m2=-amplitude*sin(a*x+b*y)+.5;
+    m=amplitude*sin(a*x+b*y+offset)+.5;
+     m2=-amplitude*sin(a*x+b*y+offset)+.5;
 
 
 
@@ -118,7 +126,7 @@ while 1
     % for simplicity: sine modulation
     % morph values range from 0 (image A) to 2 (image B)
     % 1 corresponds to intermediate stage
-    morphValue =  0.5*(sin(hertz*c+horizontal_position))+.5 ;
+    morphValue =  0.5*(sin(hertz*c))+.5 ;
     morphVector = [morphVector, morphValue];
     % A mask morphing from all-zero to a gauss blob to all-one and back:
     if morphValue < 1.0  

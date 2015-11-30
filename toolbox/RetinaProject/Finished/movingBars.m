@@ -33,6 +33,9 @@ Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
 % Setup the text type for the window
 Screen('TextFont', window, 'Ariel');
 Screen('TextSize', window, 36);
+KbName('UnifyKeyNames');
+exitkey = KbName('x');
+spacekey = KbName('space');
 
 % Get the centre coordinate of the window
 [xCenter, yCenter] = RectCenter(windowRect);
@@ -46,6 +49,8 @@ baseRect = [0 0 screenXpixels/numberofbars screenYpixels];
 % For help see: CenterRectOnPointd
 
 
+ifi = Screen('GetFlipInterval', window);
+timedInterval = round(1/ ifi);
 
 for ii = 0:numberofbars 
 
@@ -54,38 +59,59 @@ for ii = 0:numberofbars
 % set good quality antialiasing
 %Screen('DrawLines', window, allCoords,lineWidthPix, white, [(ii*lineWidthPix) 0], 2);
 centeredRect = CenterRectOnPointd(baseRect, ((screenXpixels/numberofbars)*ii), yCenter);
+for frame = 1:timedInterval  
+    [keydown, secs, keycode, deltasexcs] = KbCheck;
+    KbReleaseWait;
+    if keycode(exitkey)
+        Screen('CloseAll');
+        return
+    end
+    Screen('FillRect', window, white, centeredRect);               
+    Screen('Flip', window);               
 
-Screen('FillRect', window, white, centeredRect);
-% Flip to the screen 
-Screen('Flip', window);
-disp('X Coordinate');
-disp(((screenXpixels/numberofbars)*ii));
-KbStrokeWait;       
+end
+    % Flip to the screen
+    Screen('Flip', window);
+    Screen('FillRect', window, black);               
+    disp('X Coordinate');
+    disp(((screenXpixels/numberofbars)*ii));
 
+
+KbTriggerWait(spacekey);
+                
 end
 
 baseRect = [0 0 screenXpixels screenYpixels/numberofbars];
-
+               
 for ii = 0:numberofbars
 
 centeredRect = CenterRectOnPointd(baseRect, xCenter, ((screenYpixels/numberofbars)*ii));
 % Draw the fixation cross in white, set it to the center of our screen and
-% set good quality antialiasing
+% set good quality antialiasing  
+for frame = 1:timedInterval
+    [keydown, secs, keycode, deltasexcs] = KbCheck;
+    KbReleaseWait;
+    if keycode(exitkey)
+        Screen('CloseAll');
+        return
+    end
+    Screen('FillRect', window, white, centeredRect);
+    Screen('Flip', window);
 
-Screen('FillRect', window, white, centeredRect);
+end
 
 % Flip to the screen
 Screen('Flip', window);
 disp('Y Coordinate');               
 disp(((screenYpixels/numberofbars)*ii));
-KbStrokeWait;             
+KbTriggerWait(spacekey);             
     
 end
 
 
 
 % Wait for a key press
-KbStrokeWait;
+KbTriggerWait(spacekey);
 
 % Clear the screen
 sca; 
