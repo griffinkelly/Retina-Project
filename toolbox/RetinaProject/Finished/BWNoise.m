@@ -1,4 +1,4 @@
-function BWNoise(numRects, rectSize, scale, syncToVBL, dontclear)
+function timeNoise = BWNoise(seed, numRects, rectSize, scale, syncToVBL, dontclear, refresh_rate, contrast, duration)
 % MyBWNoise([numRects=1][, rectSize=128][, scale=1][, syncToVBL=1][, dontclear=0])
 %
 % Demonstrates how to generate and draw noise patches on-the-fly in a fast way. Can be
@@ -63,20 +63,22 @@ function BWNoise(numRects, rectSize, scale, syncToVBL, dontclear)
 AssertOpenGL;
 
 % Assign default values for all unspecified input parameters:
-
-if nargin < 1 || isempty(numRects)
+if nargin < 1 || isempty(seed)
+    seed = 0; % Draw one noise patch by default.
+end
+if nargin < 2 || isempty(numRects)
     numRects = 1; % Draw one noise patch by default.
 end
 
-if nargin < 2 || isempty(rectSize)
+if nargin < 3 || isempty(rectSize)
     rectSize = 128; % Default patch size is 128 by 128 noisels.
 end
 
-if nargin < 3 || isempty(scale)
+if nargin < 4 || isempty(scale)
     scale = 1; % Don't up- or downscale patch by default.
 end
 
-if nargin < 4 || isempty(syncToVBL)
+if nargin < 5 || isempty(syncToVBL)
     syncToVBL = 1; % Synchronize to vertical retrace by default.
 end
 
@@ -86,7 +88,7 @@ else
     asyncflag = 2;
 end
 
-if nargin < 5 || isempty(dontclear)
+if nargin < 6 || isempty(dontclear)
     dontclear = 0; % Clear backbuffer to background color by default after each bufferswap.
 end
 
@@ -96,6 +98,28 @@ if dontclear > 0
     % that, but you'll might save up to 1 millisecond.
     dontclear = 2;
 end
+
+if nargin <7 || isempty(refresh_rate)
+   refresh_rate=0;
+   hz = 0;
+   
+end
+if refresh_rate
+    hz = refresh_rate - .01;
+end
+
+if nargin <8 || isempty(contrast)
+    contrast = 100;
+end
+if contrast
+    toAdd = ((contrast/100) * 127.5)-127.5;
+    int_amplitude = 127.5 + toAdd;
+end
+if nargin < 9 || isempty(duration)
+    duration = 10; 
+end
+
+
 KbName('UnifyKeyNames');
 blackkey = KbName('b');
 whitekey = KbName('w');
@@ -116,7 +140,7 @@ exitkey = KbName('x');
 %[keydown, secs, keycode, deltasecs] = KbCheck;
 
 keepdisplay = 1;
-int_amplitude = 127;
+%int_amplitude = 127.5;
 maxSize = 1080;
 minpixel = 1;
 
@@ -131,7 +155,11 @@ try
 
 	black = BlackIndex(win);
 	white = WhiteIndex(win);
-        
+    baseRect = [0 0 50 50];
+    [screenXpixels, screenYpixels] = Screen('WindowSize', win);
+    corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
+    maxDiameter = max(baseRect) * 1.00;
+    
     % Compute destination rectangle locations for the random noise patches:
 
     % 'objRect' is a rectangle of the size 'rectSize' by 'rectSize' pixels of
@@ -157,19 +185,37 @@ try
     tstart = GetSecs;
 
     % Run noise image drawing loop for 1000 frames:
+    count = 1;    
+    tstart = GetSecs;
     
 while keepdisplay
-				
+
 		[keydown, secs, keycode, deltasexcs] = KbCheck;
 		KbReleaseWait;	
 %		Screen('FillRect', win, 128);
-%		Screen(win, 'Flip');        
+%		Screen(win, 'Flip'); 
+        seed_size = size(seed);
+        if seed_size(1)>1
+            disp('entered');
+            for i = 1:length(seed(1,1,1,:))
+                noiseimg(:, :, 1) = seed(:,:,1,i);
+                tex=Screen('MakeTexture', win, noiseimg);
+                Screen('DrawTexture', win, tex, [], dstRect(1,:), [], 0);
+                Screen('Flip', win, 0, dontclear, asyncflag);
+                Screen('FrameRect', win, [255 0 0], corner, maxDiameter);
+                pause(hz);
+                if i == length(seed(1,1,1,:))
+                    Screen('CloseAll');
+                    return
+                end
+            end
+        else
 		% Generate and draw 'numRects' noise images:
         for i=1:numRects
             % Compute noiseimg noise image matrix with Matlab:
             % Normally distributed noise with mean 128 and stddev. 50, each
             % pixel computed independently:
-            noiseimg=(int_amplitude*(floor(2*rand(rectSize, rectSize))*2-1) + 128); 
+            noiseimg=(int_amplitude*(floor(2*rand(rectSize, rectSize))*2-1) + 127.5); 
 %           noiseimg=(int_amplitude*floor(3*rand(rectSize, rectSize)-1) + 128);
             % Convert it to a texture 'tex':
             tex=Screen('MakeTexture', win, noiseimg);
@@ -185,12 +231,16 @@ while keepdisplay
             % texture! The default bilinear filtering would introduce local
             % correlations when scaling is applied:
             Screen('DrawTexture', win, tex, [], dstRect(i,:), [], 0);
+            Screen('FrameRect', win, [255 0 0], corner, maxDiameter);
 
             % After drawing, we can discard the noise texture.
 %            Screen('Close', tex);
 %			KbReleaseWait;
         end
 %		KbReleaseWait;
+        pause(hz);
+        timeNoise(:,:,:,count)=noiseimg;
+        end
   	if keycode(exitkey)
 		Screen('CloseAll');
 		str = sprintf('%d, %d, %d', int_amplitude, rectSize, scale);
@@ -346,7 +396,16 @@ while keepdisplay
         Screen('Flip', win, 0, dontclear, asyncflag);
 
         % Increase our frame counter:
-%        count = count + 1;
+    count = count + 1;
+    telapsed = GetSecs - tstart;
+
+    if telapsed>duration
+        Screen('CloseAll');
+		str = sprintf('%d, %d, %d', rectSize, scale, int_amplitude);
+		disp(str);
+%		psychrethrow(psychlasterror);
+		break
+    end
 end
 
     % We're done: Output average framerate:

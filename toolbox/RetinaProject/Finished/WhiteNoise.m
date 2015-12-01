@@ -220,11 +220,22 @@ while keepdisplay
 %		Screen('FillRect', win, 128);
 %		Screen(win, 'Flip');        
 		% Generate and draw 'numRects' noise images:
-        if seed
+        seed_size = size(seed);
+        if seed_size(1)>1
             for i = 1:length(seed(1,1,1,:))
-                noiseimg(:, :, 3) = seed(1,1,3,i);
-                noiseimg(:, :, 2) = seed(1,1,2,i);
-                noiseimg(:, :, 1) = seed(1,1,1,i);
+                disp(i);
+                noiseimg(:, :, 3) = seed(:,:,3,i);
+                noiseimg(:, :, 2) = seed(:,:,2,i);
+                noiseimg(:, :, 1) = seed(:,:,1,i);
+                tex=Screen('MakeTexture', win, noiseimg);
+                Screen('DrawTexture', win, tex, [], dstRect(1,:), [], 0);
+                Screen('Flip', win, 0, dontclear, asyncflag);
+                Screen('FrameRect', win, [255 0 0], corner, maxDiameter);
+                pause(hz);
+                if i == length(seed(1,1,1,:))
+                    Screen('CloseAll');
+                    return
+                end
             end
         else
        

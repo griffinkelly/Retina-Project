@@ -1134,15 +1134,18 @@ function pushbutton10_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 pixelSize=get(handles.edit40, 'String');
+pixelSize=str2num(pixelSize);
 scale=get(handles.edit41, 'String');
+scale=str2num(scale);
 duration=get(handles.edit42, 'String');
+duration=str2num(duration);
 refresh=get(handles.edit43, 'String');
+refresh=str2num(refresh);
 contrastLevel=get(handles.popupmenu12, 'String');
-val = get(handles.popupmenu8,'Value');
-number=str2num(number);
+val = get(handles.popupmenu12,'Value');
+contrast=str2num(contrastLevel{val});
 
-
-BWNoise();
+BWNoise([],pixelSize,scale,[],[],refresh,contrast,duration);
 
 % --- Executes on selection change in popupmenu12.
 function popupmenu12_Callback(hObject, eventdata, handles)
