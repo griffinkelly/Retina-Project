@@ -82,7 +82,7 @@ width=(1/width);
 
 tex1 = Screen('MakeTexture', w, m2,[],[], 2);
 tex2 = Screen('MakeTexture', w, m,[],[], 2); % white background
-
+redSquare = Screen('MakeTexture', w, 255,[],[], 2);
 
 % Create a shader that allows to combine the up to four input channels
 % of a texture into a weighted linear combination, using 'DrawTexture's
@@ -168,16 +168,20 @@ while 1
         % draw first image
         Screen('BlendFunction', w, GL_DST_ALPHA, GL_ZERO, [1 1 1 0]);
         Screen('DrawTexture', w, tex1, [], CenterRectOnPoint(wrect./1, cx, xy));
-        
+        Screen('DrawTexture', w, redSquare, [], corner);
         % draw second image
         Screen('BlendFunction', w, GL_ONE_MINUS_DST_ALPHA, GL_ONE, [1 1 1 0]);
         Screen('DrawTexture', w, tex2, [], CenterRectOnPoint(wrect./1, cx, xy));
+        
+        %draw white square
+        Screen('DrawTexture', w, redSquare, [], corner);
+        
     end
     
-    % show morphing stage as value:
+    % show morphing stage as value:x
     %myString = sprintf('morph stage 0 to 2: %1.1f ', morphValue);
     %DrawFormattedText(w, myString, 0, 0, [1 0 0 ]);
-    Screen('FrameRect', w, [255 0 0], corner, maxDiameter);
+    Screen('FrameRect', w, [255 255 255], corner, maxDiameter);
     Screen('Flip', w); 
     
     c = c+1; % update the count
