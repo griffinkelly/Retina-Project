@@ -51,9 +51,10 @@ function stimuliGUI2_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to stimuliGUI2 (see VARARGIN)
-%Create a text File
 
-fid = fopen( 'stimulus_record.txt', 'wt' );
+
+%Create a text File; append if exists
+fid = fopen( 'stimulus_record.txt', 'at' );
 
 
 % Choose default command line output for stimuliGUI2
@@ -757,7 +758,9 @@ rate=str2num(rate);
 fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Colored Noise:%f,%f,%f,%f %f,\r\n',datestr(now),squareSize, scale, duration, contrast,rate)
 fclose(fid);
-seed=WhiteNoise([],[], squareSize, scale, duration, contrast,[],[],[],rate);
+Color_seed=WhiteNoise([],[], squareSize, scale, duration, contrast,[],[],[],rate);
+temp_name = strcat('color_seed_',datestr(now,'mmmmddyyyy HH.MM.SS'),'.mat');
+save(temp_name);
 
 
 % --- Executes on selection change in popupmenu8.
@@ -1145,7 +1148,9 @@ contrastLevel=get(handles.popupmenu12, 'String');
 val = get(handles.popupmenu12,'Value');
 contrast=str2num(contrastLevel{val});
 
-BWNoise([],pixelSize,scale,[],[],refresh,contrast,duration);
+BWSeed = BWNoise([],[],pixelSize,scale,[],[],refresh,contrast,duration);
+temp_name = strcat('BW_seed_',datestr(now,'mmmmddyyyy HH.MM.SS'),'.mat');
+save(temp_name);
 
 % --- Executes on selection change in popupmenu12.
 function popupmenu12_Callback(hObject, eventdata, handles)

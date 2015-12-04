@@ -133,7 +133,7 @@ KbReleaseWait;
 vbl = Screen('Flip', win);
 
 % Animation loop: Repeats until keypress...
-
+KbName('UnifyKeyNames')
 blackkey = KbName('b');
 whitekey = KbName('w');
 graykey = KbName('g');
@@ -158,6 +158,8 @@ maxDiameter = max(baseRect) * 1.00;
 black = BlackIndex(win);
 white = WhiteIndex(win);
 
+daqLoop();
+
 grey= white / 2;
 
 timedInterval = round(5 / ifi);
@@ -168,7 +170,7 @@ tstart = GetSecs;
 
 while keepdisplay
 		[keydown, secs, keycode, deltasexcs] = KbCheck;
-         Screen('FrameRect', win, [0 255 255], corner, maxDiameter);
+         Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
         for time = 1:timedInterval
             [keydown, secs, keycode, deltasexcs] = KbCheck;
             KbReleaseWait;
@@ -180,7 +182,7 @@ while keepdisplay
             freq = 1/gratingwidth;
             
             Screen('DrawTexture', win, gratingtex, [], [], angle, [], [], [], [], rotateMode, [phase, freq, amplitude, 0]);
-            Screen('FrameRect', win, [255 0 0], corner, maxDiameter);
+            Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
             vbl = Screen('Flip', win, vbl + 0.5 * ifi);    
             
         end 
@@ -197,7 +199,7 @@ while keepdisplay
                 end
              % Color the screen grey
             Screen('FillRect', win, grey);
-            Screen('FrameRect', win, [255 0 0], corner, maxDiameter);
+            Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
             vbl = Screen('Flip', win, vbl + 0.5 * ifi); 
            
         end

@@ -67,6 +67,7 @@ numFrames = round(pulseDuration / ifi);
 % Numer of frames to wait when specifying good timing
 waitframes = 1;
 %KbStrokeWait;
+daqLoop();
 
 for totalRepeats = 1: repNum
 
@@ -87,7 +88,7 @@ for frame = 1:numFrames
 
     % Color the screen white
     Screen('FillRect', window, contrast1);
-    Screen('FrameRect', window, [255 0 0], corner, maxDiameter);
+    Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
     % Flip to the screen
     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
 
@@ -109,7 +110,7 @@ for frame = 1:numFrames
     end
     % Color the screen grey
     Screen('FillRect', window, contrast2);
-    Screen('FrameRect', window, [255 0 0], corner, maxDiameter);
+    Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
     % Tell PTB no more drawing commands will be issued until the next flip
     Screen('DrawingFinished', window);
 

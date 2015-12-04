@@ -1,4 +1,12 @@
 function centeredSpot(circleSize, contrast, repNum, pulseDuration,positionArray)
+%A Function which shows a white spot in the center of a black background
+%Circle Size: a scaling factor of circle size, 1, 2, etc.
+%Contrast: 0-100%, contrast of black and white
+%repNum: Number of times the circle will pulse
+%Pulse Duration: Number of seconds the pulse will occur for
+%position Array: a vector of x, y coordinates of where the circle will be
+%centered
+%Written: Griffin Kelly, 2015, griffinkelly2013@gmail.com
 
 
 if nargin < 1 || isempty(circleSize)
@@ -85,7 +93,7 @@ numFrames = round(pulseDuration / ifi);
 % Numer of frames to wait when specifying good timing
 waitframes = 1;
 %KbStrokeWait;
-
+daqLoop();
 for totalRepeats = 1: repNum
 
 % Here we do exactly the same as the second example, but we additionally
@@ -95,7 +103,7 @@ for totalRepeats = 1: repNum
 % critical code in order to allow other processes to run.
 Priority(topPriorityLevel);
 vbl = Screen('Flip', window);
-Screen('FrameRect', window, [255 0 0], corner, maxSquare);
+Screen('FrameRect', window, [255 255 255], corner, maxSquare);
 for frame = 1:numFrames
     [keydown, secs, keycode, deltasexcs] = KbCheck;
     KbReleaseWait;
@@ -103,7 +111,7 @@ for frame = 1:numFrames
         Screen('CloseAll');
         return
     end
-Screen('FrameRect', window, [255 0 0], corner, maxSquare);
+Screen('FrameRect', window, [255 255 255], corner, maxSquare);
 % Draw the rect to the screen
 Screen('FillOval', window, rectColor, centeredRect, maxDiameter);
     % Flip to the screen
@@ -118,9 +126,9 @@ Priority(0);
 % acheive good timing.
 Priority(topPriorityLevel);
 vbl = Screen('Flip', window);
-Screen('FrameRect', window, [255 0 0], corner, maxSquare);
+Screen('FrameRect', window, [255 255 255], corner, maxSquare);
 for frame = 1:numFrames    
-Screen('FrameRect', window, [255 0 0], corner, maxSquare);
+Screen('FrameRect', window, [255 255 255], corner, maxSquare);
 % Draw the rect to the screen
 Screen('FillOval', window, rectColor2, centeredRect, maxDiameter);
 

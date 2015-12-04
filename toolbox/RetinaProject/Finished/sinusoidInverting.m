@@ -114,6 +114,8 @@ baseRect = [0 0 50 50];
 corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
 maxDiameter = max(baseRect) * 1.00;
 
+daqLoop();
+
 c = 1;
 vector=[];
 morphVector=[];

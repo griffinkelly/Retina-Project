@@ -1,4 +1,10 @@
 function movingBars(numberofbars)
+%Moving Bars is a function which will segement a black screen into a
+%specific number of white flashing bars. Will wait for key press before
+%moving on to next flash of bar. Each bar will flash for one second.
+%numberofbars: the number of bars that will display in both the x and y
+%directions.
+%Written: Griffin Kelly, 2015, griffinkelly2013@gmail.com
 
 if nargin < 1 || isempty(numberofbars)
     % Tilt angle of the grating:
@@ -50,12 +56,12 @@ maxDiameter = max(baseRect2) * 1.00;
 % Center the rectangle on the centre of the screen using fractional pixel
 % values.
 % For help see: CenterRectOnPointd
-
+daqLoop();
 
 ifi = Screen('GetFlipInterval', window);
 timedInterval = round(1/ ifi);
 
-for ii = 0:numberofbars 
+for ii = 0:numberofbars-1 
 
 
 % Draw the fixation cross in white, set it to the center of our screen and
@@ -69,12 +75,12 @@ for frame = 1:timedInterval
         Screen('CloseAll');
         return
     end
-    Screen('FrameRect', window, [255 0 0], corner, maxDiameter);
+    Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
     Screen('FillRect', window, white, centeredRect);               
     Screen('Flip', window);               
 
 end
-    Screen('FrameRect', window, [255 0 0], corner, maxDiameter);
+    Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
     % Flip to the screen
     Screen('Flip', window);
     Screen('FillRect', window, black);               
@@ -88,7 +94,7 @@ end
 
 baseRect = [0 0 screenXpixels screenYpixels/numberofbars];
                
-for ii = 0:numberofbars
+for ii = 0:numberofbars-1
 
 centeredRect = CenterRectOnPointd(baseRect, xCenter, ((screenYpixels/numberofbars)*ii));
 % Draw the fixation cross in white, set it to the center of our screen and
@@ -100,15 +106,15 @@ for frame = 1:timedInterval
         Screen('CloseAll');
         return
     end
-    Screen('FrameRect', window, [255 0 0], corner, maxDiameter);
+    Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
     Screen('FillRect', window, white, centeredRect);
     Screen('Flip', window);
 
 end
-Screen('FrameRect', window, [255 0 0], corner, maxDiameter);
+Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
 % Flip to the screen
 Screen('Flip', window);
-disp('Y Coordinate');               
+disp('Y Coordinate');                 
 disp(((screenYpixels/numberofbars)*ii));
 KbTriggerWait(spacekey);             
     

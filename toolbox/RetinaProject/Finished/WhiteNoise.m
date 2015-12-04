@@ -140,7 +140,6 @@ exitkey = KbName('x');
 
 %[keydown, secs, keycode, deltasecs] = KbCheck;
 
-
 keepdisplay = 1;
 %int_amplitude = 1;
 maxSize = 1080;
@@ -207,6 +206,8 @@ try
 %		rectSize = rectSize/scale;
     end
 
+    daqLoop();
+    
     % Init framecounter to zero and take initial timestamp:
     count = 1;    
     tstart = GetSecs;
@@ -230,7 +231,7 @@ while keepdisplay
                 tex=Screen('MakeTexture', win, noiseimg);
                 Screen('DrawTexture', win, tex, [], dstRect(1,:), [], 0);
                 Screen('Flip', win, 0, dontclear, asyncflag);
-                Screen('FrameRect', win, [255 0 0], corner, maxDiameter);
+                Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
                 pause(hz);
                 if i == length(seed(1,1,1,:))
                     Screen('CloseAll');
@@ -270,7 +271,7 @@ while keepdisplay
             % texture! The default bilinear filtering would introduce local
             % correlations when scaling is applied:
 			Screen('DrawTexture', win, tex, [], dstRect(i,:), [], 0);
-            Screen('FrameRect', win, [255 0 0], corner, maxDiameter);
+            Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
 %			Screen('DrawTexxxture', win, tex, [], dstRect(i,:), [], 0, [0: 255: 0]);
 			
 %			Screen(win, 'Flip'); 
