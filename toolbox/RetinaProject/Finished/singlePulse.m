@@ -1,4 +1,4 @@
-function singlePulse(repNum, pulseDuration, restBefore, restAfter, contrastLevel)
+function singlePulse(repNum, pulseDuration, restBefore, restAfter, contrastLevel,daqValue)
 
 
 
@@ -60,7 +60,9 @@ ifi = Screen('GetFlipInterval', window);
 topPriorityLevel = MaxPriority(window);
 
 % Length of time and number of frames we will use for each drawing test
-daqLoop();
+if daqValue == 1
+    daqLoop();
+end
 
 numFrames = round(pulseDuration / ifi);
 

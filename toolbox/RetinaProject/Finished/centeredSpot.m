@@ -1,4 +1,4 @@
-function centeredSpot(circleSize, contrast, repNum, pulseDuration,positionArray)
+function centeredSpot(circleSize, contrast, repNum, pulseDuration,positionArray,daqValue)
 %A Function which shows a white spot in the center of a black background
 %Circle Size: a scaling factor of circle size, 1, 2, etc.
 %Contrast: 0-100%, contrast of black and white
@@ -24,6 +24,9 @@ end
 if nargin < 4 || isempty(pulseDuration)
     
     pulseDuration=1; 
+end
+if nargin < 5 || isempty(daqValue)
+    daqValue = 0;
 end
 contrast=contrast/100;
 % Here we call some default settings for setting up Psychtoolbox
@@ -96,7 +99,9 @@ numFrames = round(pulseDuration / ifi);
 % Numer of frames to wait when specifying good timing
 waitframes = 1;
 %KbStrokeWait;
-daqLoop();
+if daqValue == 1
+    daqLoop();
+end
 for totalRepeats = 1: repNum
 
 % Here we do exactly the same as the second example, but we additionally

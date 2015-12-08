@@ -1,4 +1,4 @@
-function timeNoise = WhiteNoise(seed,numRects, rectSize, scale, duration, int_amplitude, syncToVBL, dontclear, color_choice, refresh_rate)
+function timeNoise = WhiteNoise(seed,numRects, rectSize, scale, duration, int_amplitude, syncToVBL, dontclear, color_choice, refresh_rate,daqValue)
 % MyWhiteNoise([numRects=1][, rectSize=128][, scale=1][, syncToVBL=1][, dontclear=0])
 %
 % Demonstrates how to generate and draw noise patches on-the-fly in a fast way. Can be
@@ -114,6 +114,10 @@ end
 if refresh_rate
     hz = refresh_rate - .01;
 end
+
+if nargin <11 || isempty(daqValue)
+    daqValue = 0;
+end
 if dontclear > 0
     % A value of 2 will prevent any change to the backbuffer after a
     % bufferswap. In that case it is your responsibility to take care of
@@ -205,8 +209,9 @@ try
         dstRect(i,:)=CenterRectOnPoint(objRect * scale, xc, yc);
 %		rectSize = rectSize/scale;
     end
-
-    daqLoop();
+    if daqValue == 1
+       daqLoop();
+    end
     
     % Init framecounter to zero and take initial timestamp:
     count = 1;    

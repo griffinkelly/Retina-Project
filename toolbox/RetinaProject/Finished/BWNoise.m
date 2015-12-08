@@ -1,4 +1,4 @@
-function timeNoise = BWNoise(seed, numRects, rectSize, scale, syncToVBL, dontclear, refresh_rate, contrast, duration)
+function timeNoise = BWNoise(seed, numRects, rectSize, scale, syncToVBL, dontclear, refresh_rate, contrast, duration,daqValue)
 % MyBWNoise([numRects=1][, rectSize=128][, scale=1][, syncToVBL=1][, dontclear=0])
 %
 % Demonstrates how to generate and draw noise patches on-the-fly in a fast way. Can be
@@ -118,6 +118,9 @@ end
 if nargin < 9 || isempty(duration)
     duration = 10; 
 end
+if nargin <10 || isempty(daqValue)
+    daqValue = 0;
+end
 
 Screen('Preference', 'VisualDebugLevel', 1);
 KbName('UnifyKeyNames');
@@ -180,7 +183,9 @@ try
 %		rectSize = rectSize/scale;
     end
 
-    %daqLoop();
+    if daqValue == 1
+         daqLoop();
+    end
     % Init framecounter to zero and take initial timestamp:
     count = 0;    
     tstart = GetSecs;

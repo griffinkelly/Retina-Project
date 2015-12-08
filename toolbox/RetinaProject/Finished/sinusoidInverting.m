@@ -1,4 +1,4 @@
-   function sinusoidInverting(morphType, showMaskOnly, degree, hertz, amplitude, duration, width, offset)
+   function sinusoidInverting(morphType, showMaskOnly, degree, hertz, amplitude, duration, width, offset,daqValue)
 % SimpleImageMixingDemo([morphType=gaussian][, showMaskOnly=0])
 %
 % This is a simple demonstration of shader use to morph two images/textures 
@@ -51,6 +51,10 @@ end
 
 if nargin < 8 || isempty(offset)
     offset = 0;
+end
+
+if nargin < 9 || isempty(daqValue)
+    daqValue = 0
 end
 % open window
 Screen('Preference', 'VisualDebugLevel', 1);
@@ -114,7 +118,9 @@ baseRect = [0 0 50 50];
 corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
 maxDiameter = max(baseRect) * 1.00;
 
-daqLoop();
+if daqValue == 1
+    daqLoop();
+end
 
 c = 1;
 vector=[];

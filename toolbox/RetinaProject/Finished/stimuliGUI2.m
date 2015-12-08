@@ -22,7 +22,7 @@ function varargout = stimuliGUI2(varargin)
 
 % Edit the above text to modify the response to help stimuliGUI2
 
-% Last Modified by GUIDE v2.5 08-Dec-2015 14:41:51
+% Last Modified by GUIDE v2.5 08-Dec-2015 15:37:33
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -294,12 +294,12 @@ restAfter=str2num(restAfter);
 contrastLevel=get(handles.popupmenu2, 'String');
 val = get(handles.popupmenu2,'Value');
 contrast=str2num(contrastLevel{val});
-
+daqValue = get(handles.checkbox6, 'Value');
 fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Single Pulse:%f,%f,%f,%f,%f\r\n',datestr(now),repNumber, pulseDuration, restBefore, restAfter,contrast)
 fclose(fid);
 
-singlePulse(repNumber, pulseDuration, restBefore, restAfter,contrast);
+singlePulse(repNumber, pulseDuration, restBefore, restAfter,contrast,daqValue);
 
 % --- Executes on selection change in popupmenu2.
 function popupmenu2_Callback(hObject, eventdata, handles)
@@ -383,11 +383,11 @@ pulseDuration=str2num(pulseDuration);
 contrastLevel=get(handles.popupmenu5, 'String');
 val = get(handles.popupmenu5,'Value');
 contrast=str2num(contrastLevel{val});
-
+daqValue = get(handles.checkbox6, 'Value');
 fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Square Wave:%f,%f,%f\r\n',datestr(now),repNumber, pulseDuration,contrast)
 fclose(fid);
-squareWave(repNumber, pulseDuration,contrast);
+squareWave(repNumber, pulseDuration,contrast,daqValue);
 
 
 % --- Executes on selection change in popupmenu5.
@@ -480,9 +480,10 @@ fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Directional Sinusoid:%f,%f,%f,%f, %f \r\n',datestr(now),driftAngle,-driftSpeed,gratingwidth,contrast,duration)
 fclose(fid);
 checkvalue = get(handles.checkbox1, 'Value');
+daqValue = get(handles.checkbox6, 'Value');
 
 
-directionalSinusoid(driftAngle,-driftSpeed,gratingwidth,[],[],contrast,duration,checkvalue);
+directionalSinusoid(driftAngle,-driftSpeed,gratingwidth,[],[],contrast,duration,checkvalue,daqValue);
 
 
 
@@ -620,11 +621,12 @@ duration=get(handles.edit20, 'String');
 duration=str2num(duration);
 offset=get(handles.edit38, 'String');
 offset=str2num(offset);
+daqValue = get(handles.checkbox6, 'Value');
 fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Inverting Sinusoid:%f,%f,%f,%f %f, %f \r\n',datestr(now),driftAngle, driftSpeed, contrast, duration, gratingwidth,offset)
 fclose(fid);
 
-sinusoidInverting('ramp', 0, driftAngle, driftSpeed, contrast, duration, gratingwidth,offset)
+sinusoidInverting('ramp', 0, driftAngle, driftSpeed, contrast, duration, gratingwidth,offset,daqValue)
 
 % --- Executes on selection change in popupmenu7.
 function popupmenu7_Callback(hObject, eventdata, handles)
@@ -759,10 +761,12 @@ duration=get(handles.edit24, 'String');
 duration=str2num(duration);
 rate=get(handles.edit39, 'String');
 rate=str2num(rate);
+daqValue = get(handles.checkbox6, 'Value');
 fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Colored Noise:%f,%f,%f,%f %f,\r\n',datestr(now),squareSize, scale, duration, contrast,rate)
 fclose(fid);
-Color_seed=WhiteNoise([],[], squareSize, scale, duration, contrast,[],[],[],rate);
+
+Color_seed=WhiteNoise([],[], squareSize, scale, duration, contrast,[],[],[],rate,daqValue);
 temp_name = strcat('color_seed_',datestr(now,'mmmmddyyyy HH.MM.SS'),'.mat');
 save(temp_name);
 
@@ -903,11 +907,12 @@ xpos=str2num(xpos);
 ypos=get(handles.edit29, 'String');
 ypos=str2num(ypos);
 positionarray=[xpos,ypos];
+daqValue = get(handles.checkbox6, 'Value');
 %disp(ypos)
 fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Centered Spot: %f,%f,%f,%f,%f\r\n',datestr(now),circleSize,contrast,reps,duration,positionarray)
 fclose(fid);
-centeredSpot(circleSize, contrast, reps, duration,positionarray)
+centeredSpot(circleSize, contrast, reps, duration,positionarray,daqValue)
 
 
 
@@ -1013,10 +1018,11 @@ function pushbutton9_Callback(hObject, eventdata, handles)
 number=get(handles.edit37, 'String');
 number=str2num(number);
 checkvalue = get(handles.checkbox2, 'Value');
+daqValue = get(handles.checkbox6, 'Value');
 fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Moving Bars: %f,\r\n',datestr(now),number)
 fclose(fid);
-movingBars(number,checkvalue);
+movingBars(number,checkvalue,daqValue);
 
 
 
@@ -1151,8 +1157,13 @@ refresh=str2num(refresh);
 contrastLevel=get(handles.popupmenu12, 'String');
 val = get(handles.popupmenu12,'Value');
 contrast=str2num(contrastLevel{val});
+daqValue = get(handles.checkbox6, 'Value');
 
-BWSeed = BWNoise([],[],pixelSize,scale,[],[],refresh,contrast,duration);
+fid = fopen('stimulus_record.txt','at');
+fprintf(fid, '%s, BW Noise:%f,%f,%f,%f %f,\r\n',datestr(now),pixelSize, scale, duration, contrast,refresh)
+fclose(fid);
+
+BWSeed = BWNoise([],[],pixelSize,scale,[],[],refresh,contrast,duration,daqValue);
 temp_name = strcat('BW_seed_',datestr(now,'mmmmddyyyy HH.MM.SS'),'.mat');
 save(temp_name);
 
@@ -1241,3 +1252,12 @@ function checkbox2_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of checkbox2
+
+
+% --- Executes on button press in checkbox6.
+function checkbox6_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox6

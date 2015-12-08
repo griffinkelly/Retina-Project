@@ -1,4 +1,4 @@
-function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, internalRotation, contrast, duration, singleAngle)
+function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, internalRotation, contrast, duration, singleAngle,daqValue)
 % function MyStimulator([angle=0][, cyclespersecond=1][, gratingwidth=360][, gratingsize=2400][, internalRotation=0])
 % ___________________________________________________________________
 %
@@ -52,6 +52,9 @@ function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, 
 AssertOpenGL;
 
 % Initial stimulus parameters for the grating patch:
+if nargin <9 || isempty(daqValue)
+    daqValue = 0;
+end
 if nargin < 8 || isempty(singleAngle)
     singleAngle = 0;
 end
@@ -161,7 +164,9 @@ maxDiameter = max(baseRect) * 1.00;
 black = BlackIndex(win);
 white = WhiteIndex(win);
 
-daqLoop();
+if daqValue == 1
+    daqLoop();
+end
 
 grey= white / 2;
 

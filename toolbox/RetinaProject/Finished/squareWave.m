@@ -1,4 +1,4 @@
-function squareWave(repNum, pulseDuration,contrastLevel)
+function squareWave(repNum, pulseDuration,contrastLevel,daqValue)
 
 
 Screen('Preference','VisualDebugLevel',1);
@@ -67,7 +67,10 @@ numFrames = round(pulseDuration / ifi);
 % Numer of frames to wait when specifying good timing
 waitframes = 1;
 %KbStrokeWait;
-daqLoop();
+
+if daqValue == 1
+    daqLoop();
+end
 
 for totalRepeats = 1: repNum
 
