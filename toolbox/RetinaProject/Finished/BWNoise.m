@@ -100,7 +100,7 @@ if dontclear > 0
 end
 
 if nargin <7 || isempty(refresh_rate)
-   refresh_rate=0;
+   refresh_rate=0.2;
    hz = 0;
    
 end
@@ -180,7 +180,7 @@ try
 %		rectSize = rectSize/scale;
     end
 
-    daqLoop();
+    %daqLoop();
     % Init framecounter to zero and take initial timestamp:
     count = 0;    
     tstart = GetSecs;

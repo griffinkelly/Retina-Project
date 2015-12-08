@@ -7,12 +7,12 @@ v=0;
 daq = DaqFind;
 
 %waits for threshold less than -5 volts.
-while -5<v
+while -4<v
     [keydown, secs, keycode, deltasexcs] = KbCheck;
     v = DaqAIn(daq,0,1);
     %display Voltage
     
-    disp(v);
+    %disp(v);
     
     %If you press 'x' during the holding, it will break out of loop.
     if keycode(exitkey)
@@ -20,8 +20,8 @@ while -5<v
         return
     end
 end
-disp('end loop');
+%disp('end loop');
 
 %If paused needed right after impulse, uncomment next line
-%pause(.2);
+pause(.1);
 end

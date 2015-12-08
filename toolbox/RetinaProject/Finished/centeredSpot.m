@@ -19,7 +19,7 @@ if nargin < 2 || isempty(contrast)
 end
 if nargin < 3 || isempty(repNum)
     
-    repNum=2; 
+    repNum=20; 
 end
 if nargin < 4 || isempty(pulseDuration)
     
@@ -57,6 +57,10 @@ end
 KbName('UnifyKeyNames');
 exitkey = KbName('x');
 spacekey = KbName('space');
+rightArrow = KbName('RightArrow');
+leftArrow = KbName('LeftArrow');
+upArrow = KbName('UpArrow');
+downArrow = KbName('DownArrow');
 
 % Get the centre coordinate of the window
 %[xCenter, yCenter] = RectCenter(windowRect);
@@ -72,7 +76,6 @@ maxDiameter = max(baseRect) * 1.00;
 
 % Center the rectangle on the centre of the screen
 centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
-
 corner = CenterRectOnPointd(baseSquare, screenXpixels, screenYpixels);
 amplitude = white-(contrast*white);
 amp_number = amplitude/2;
@@ -110,7 +113,17 @@ for frame = 1:numFrames
     if keycode(exitkey)
         Screen('CloseAll');
         return
+    elseif keycode(upArrow)
+        yCenter = yCenter - 10;
+    elseif keycode(downArrow)
+        yCenter = yCenter + 10;
+    elseif keycode(rightArrow)
+        xCenter = xCenter + 10;
+    elseif keycode(leftArrow)
+        xCenter = xCenter - 10;
     end
+centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
+corner = CenterRectOnPointd(baseSquare, screenXpixels, screenYpixels);
 Screen('FrameRect', window, [255 255 255], corner, maxSquare);
 % Draw the rect to the screen
 Screen('FillOval', window, rectColor, centeredRect, maxDiameter);
@@ -142,8 +155,17 @@ Screen('FillOval', window, rectColor2, centeredRect, maxDiameter);
     if keycode(exitkey)
         Screen('CloseAll');
         return
+    elseif keycode(upArrow)
+        yCenter = yCenter - 10;
+    elseif keycode(downArrow)
+        yCenter = yCenter + 10;
+    elseif keycode(rightArrow)
+        xCenter = xCenter + 10;
+    elseif keycode(leftArrow)
+        xCenter = xCenter - 10;
     end
-
+centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
+corner = CenterRectOnPointd(baseSquare, screenXpixels, screenYpixels);
 end
 Priority(0);
 

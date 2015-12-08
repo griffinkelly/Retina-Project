@@ -22,7 +22,7 @@ function varargout = stimuliGUI2(varargin)
 
 % Edit the above text to modify the response to help stimuliGUI2
 
-% Last Modified by GUIDE v2.5 08-Dec-2015 14:01:34
+% Last Modified by GUIDE v2.5 08-Dec-2015 14:41:51
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1012,11 +1012,11 @@ function pushbutton9_Callback(hObject, eventdata, handles)
 %Code for Moving Bars GUI Panel
 number=get(handles.edit37, 'String');
 number=str2num(number);
-
+checkvalue = get(handles.checkbox2, 'Value');
 fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Moving Bars: %f,\r\n',datestr(now),number)
 fclose(fid);
-movingBars(number);
+movingBars(number,checkvalue);
 
 
 
@@ -1232,3 +1232,12 @@ function checkbox1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of checkbox1
+
+
+% --- Executes on button press in checkbox2.
+function checkbox2_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox2
