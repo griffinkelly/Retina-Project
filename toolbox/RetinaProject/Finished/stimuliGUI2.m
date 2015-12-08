@@ -22,7 +22,7 @@ function varargout = stimuliGUI2(varargin)
 
 % Edit the above text to modify the response to help stimuliGUI2
 
-% Last Modified by GUIDE v2.5 30-Nov-2015 17:09:16
+% Last Modified by GUIDE v2.5 08-Dec-2015 14:01:34
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -479,7 +479,11 @@ duration=str2num(duration);
 fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Directional Sinusoid:%f,%f,%f,%f, %f \r\n',datestr(now),driftAngle,-driftSpeed,gratingwidth,contrast,duration)
 fclose(fid);
-directionalSinusoid(driftAngle,-driftSpeed,gratingwidth,[],[],contrast,duration);
+checkvalue = get(handles.checkbox1, 'Value');
+
+
+directionalSinusoid(driftAngle,-driftSpeed,gratingwidth,[],[],contrast,duration,checkvalue);
+
 
 
 % --- Executes on selection change in popupmenu6.
@@ -1219,3 +1223,12 @@ function edit43_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in checkbox1.
+function checkbox1_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox1

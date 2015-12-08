@@ -1,4 +1,4 @@
-function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, internalRotation, contrast, duration)
+function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, internalRotation, contrast, duration, singleAngle)
 % function MyStimulator([angle=0][, cyclespersecond=1][, gratingwidth=360][, gratingsize=2400][, internalRotation=0])
 % ___________________________________________________________________
 %
@@ -52,6 +52,9 @@ function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, 
 AssertOpenGL;
 
 % Initial stimulus parameters for the grating patch:
+if nargin < 8 || isempty(singleAngle)
+    singleAngle = 0;
+end
 if nargin < 7 || isempty(duration)
     duration = 10;
 end
@@ -171,39 +174,54 @@ tstart = GetSecs;
 while keepdisplay
 		[keydown, secs, keycode, deltasexcs] = KbCheck;
          Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
-        for time = 1:timedInterval
-            [keydown, secs, keycode, deltasexcs] = KbCheck;
-            KbReleaseWait;
-            if keycode(exitkey)
-                Screen('CloseAll');
-                return
-            end
-            phase = phase + phaseincrement;
-            freq = 1/gratingwidth;
-            
-            Screen('DrawTexture', win, gratingtex, [], [], angle, [], [], [], [], rotateMode, [phase, freq, amplitude, 0]);
-            Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
-            vbl = Screen('Flip', win, vbl + 0.5 * ifi);    
-            
-        end 
-        
-        angle = angle + 5;
-		phase = phase + phaseincrement;
-        
-        for timed = 1:timedInterval2
-             [keydown, secs, keycode, deltasexcs] = KbCheck;
+         
+         if (singleAngle == 1 )
+                [keydown, secs, keycode, deltasexcs] = KbCheck;
                 KbReleaseWait;
                 if keycode(exitkey)
                     Screen('CloseAll');
                     return
                 end
-             % Color the screen grey
-            Screen('FillRect', win, grey);
-            Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
-            vbl = Screen('Flip', win, vbl + 0.5 * ifi); 
-           
+                phase = phase + phaseincrement;
+                freq = 1/gratingwidth;
+                Screen('DrawTexture', win, gratingtex, [], [], angle, [], [], [], [], rotateMode, [phase, freq, amplitude, 0]);
+                Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
+                vbl = Screen('Flip', win, vbl + 0.5 * ifi);
+
+         else
+            for time = 1:timedInterval
+                [keydown, secs, keycode, deltasexcs] = KbCheck;
+                KbReleaseWait;
+                if keycode(exitkey)
+                    Screen('CloseAll');
+                    return
+                end
+                phase = phase + phaseincrement;
+                freq = 1/gratingwidth;
+
+                Screen('DrawTexture', win, gratingtex, [], [], angle, [], [], [], [], rotateMode, [phase, freq, amplitude, 0]);
+                Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
+                vbl = Screen('Flip', win, vbl + 0.5 * ifi);    
+
+            end 
+
+            angle = angle + 45;
+            phase = phase + phaseincrement;
+
+            for timed = 1:timedInterval2
+                 [keydown, secs, keycode, deltasexcs] = KbCheck;
+                    KbReleaseWait;
+                    if keycode(exitkey)
+                        Screen('CloseAll');
+                        return
+                    end
+                 % Color the screen grey
+                Screen('FillRect', win, grey);
+                Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
+                vbl = Screen('Flip', win, vbl + 0.5 * ifi); 
+
+            end
         end
-        
 	if keycode(exitkey)
 		Screen('CloseAll');
 		str = sprintf('%d, %d, %d', angle, cyclespersecond, gratingwidth);

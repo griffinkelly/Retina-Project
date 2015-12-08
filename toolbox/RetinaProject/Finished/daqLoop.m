@@ -12,7 +12,7 @@ while -5<v
     v = DaqAIn(daq,0,1);
     %display Voltage
     
-    %disp(v);
+    disp(v);
     
     %If you press 'x' during the holding, it will break out of loop.
     if keycode(exitkey)
@@ -20,7 +20,7 @@ while -5<v
         return
     end
 end
-%disp('end loop');
+disp('end loop');
 
 %If paused needed right after impulse, uncomment next line
 %pause(.2);
