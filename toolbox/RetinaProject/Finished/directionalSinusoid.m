@@ -1,5 +1,5 @@
 function directionalSinusoid(angle, cyclespersecond, gratingwidth, gratingsize, internalRotation, contrast, duration, singleAngle,daqValue)
-% function MyStimulator([angle=0][, cyclespersecond=1][, gratingwidth=360][, gratingsize=2400][, internalRotation=0])
+% function MyStimulator([angle=0][, cyclespersecond=1][, gratingwidth=100][, gratingsize=100][, internalRotation=0])
 % ___________________________________________________________________
 %
 % Display an animated grating, using the new Screen('DrawTexture') command.
@@ -157,7 +157,7 @@ decreasegratingwidth = KbName('DownArrow');
 exitkey = KbName('x');
 
 %[keydown, secs, keycode, deltasecs] = KbCheck;
-baseRect = [0 0 50 50];
+baseRect = [0 0 100 100];
 [screenXpixels, screenYpixels] = Screen('WindowSize', win);
 corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
 maxDiameter = max(baseRect) * 1.00;

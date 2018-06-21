@@ -1,11 +1,13 @@
-function movingBars(numberofbars, skipX)
+function movingBars(numberofbars, skipX, daqValue)
 %Moving Bars is a function which will segement a black screen into a
 %specific number of white flashing bars. Will wait for key press before
 %moving on to next flash of bar. Each bar will flash for one second.
 %numberofbars: the number of bars that will display in both the x and y
 %directions.
 %Written: Griffin Kelly, 2015, griffinkelly2013@gmail.com
-
+if nargin <3 || isempty(daqValue)
+    daqValue = 0;
+end
 if nargin < 2 || isempty(skipX)
     % Tilt angle of the grating:
     skipX = 0;
@@ -56,23 +58,26 @@ leftArrow = KbName('LeftArrow');
 % Set the width for our rectangle 
 baseRect = [0 0 screenXpixels/numberofbars screenYpixels];
 
-baseRect2 = [0 0 50 50];
+baseRect2 = [0 0 100 100];
 corner = CenterRectOnPointd(baseRect2, screenXpixels, screenYpixels);
 maxDiameter = max(baseRect2) * 1.00;
 % Center the rectangle on the centre of the screen using fractional pixel
 % values.
 % For help see: CenterRectOnPointd
-daqLoop();
+if daqValue == 1
+    daqLoop();
+end
 
 ifi = Screen('GetFlipInterval', window);
 timedInterval = round(1/ ifi);
-ii = 0;
 xCount = numberofbars-1;
+ii = xCount/2;
+
 if(skipX == 1)
     baseRect = [0 0 screenXpixels screenYpixels/numberofbars];
 
     yCount = numberofbars - 1 ;
-    ii = 0;
+    ii = yCount/2;
     while ii<yCount
 
         centeredRect = CenterRectOnPointd(baseRect, xCenter, ((screenYpixels/numberofbars)*ii));
@@ -86,8 +91,12 @@ if(skipX == 1)
                 return
             elseif keycode(rightArrow)
                 ii = ii + 1;
+                str = sprintf('Y: %d',((screenYpixels/numberofbars)*ii));
+                disp(str); 
             elseif keycode(leftArrow)
                 ii = ii - 1;
+                str = sprintf('Y: %d',((screenYpixels/numberofbars)*ii));
+                disp(str); 
             end
             Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
             Screen('FillRect', window, white, centeredRect);
@@ -102,14 +111,17 @@ if(skipX == 1)
                 return
             elseif keycode(rightArrow)
                 ii = ii + 1;
+                str = sprintf('Y: %d',((screenYpixels/numberofbars)*ii));
+                disp(str); 
             elseif keycode(leftArrow)
                 ii = ii - 1;
+                str = sprintf('Y: %d',((screenYpixels/numberofbars)*ii));
+                disp(str);              
+
             end
             Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
             % Flip to the screen
             Screen('Flip', window);
-            disp('Y Coordinate');                 
-            disp(((screenYpixels/numberofbars)*ii));
 
         end
 
@@ -132,8 +144,12 @@ while ii < xCount
             return
         elseif keycode(rightArrow)
             ii = ii + 1;
+            str = sprintf('X: %d',((screenXpixels/numberofbars)*ii));
+            disp(str);
         elseif keycode(leftArrow)
             ii = ii - 1;
+            str = sprintf('X: %d',((screenXpixels/numberofbars)*ii));
+            disp(str);
         end
         Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
         Screen('FillRect', window, white, centeredRect);               
@@ -148,15 +164,18 @@ while ii < xCount
             return
         elseif keycode(rightArrow)
             ii = ii + 1;
+            str = sprintf('X: %d',((screenXpixels/numberofbars)*ii));
+            disp(str);
         elseif keycode(leftArrow)
             ii = ii - 1;
+            str = sprintf('X: %d',((screenXpixels/numberofbars)*ii));
+            disp(str);
         end
         Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
         % Flip to the screen
         Screen('Flip', window);
         Screen('FillRect', window, black);               
-        disp('X Coordinate');
-        disp(((screenXpixels/numberofbars)*ii));
+        
     end
 
 
@@ -165,7 +184,7 @@ end
 baseRect = [0 0 screenXpixels screenYpixels/numberofbars];
 
 yCount = numberofbars - 1 ;
-ii = 0;
+ii = yCount/2;
 while ii<yCount
 
     centeredRect = CenterRectOnPointd(baseRect, xCenter, ((screenYpixels/numberofbars)*ii));
@@ -179,8 +198,12 @@ while ii<yCount
             return
         elseif keycode(rightArrow)
             ii = ii + 1;
+            str = sprintf('Y: %d',((screenYpixels/numberofbars)*ii));
+            disp(str); 
         elseif keycode(leftArrow)
             ii = ii - 1;
+            str = sprintf('Y: %d',((screenYpixels/numberofbars)*ii));
+            disp(str); 
         end
         Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
         Screen('FillRect', window, white, centeredRect);
@@ -195,14 +218,16 @@ while ii<yCount
             return
         elseif keycode(rightArrow)
             ii = ii + 1;
+            str = sprintf('Y: %d',((screenYpixels/numberofbars)*ii));
+            disp(str); 
         elseif keycode(leftArrow)
             ii = ii - 1;
+            str = sprintf('Y: %d',((screenYpixels/numberofbars)*ii));
+            disp(str); 
         end
         Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
         % Flip to the screen
         Screen('Flip', window);
-        disp('Y Coordinate');                 
-        disp(((screenYpixels/numberofbars)*ii));
          
     end
     

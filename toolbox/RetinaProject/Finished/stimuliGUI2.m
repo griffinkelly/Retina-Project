@@ -22,7 +22,7 @@ function varargout = stimuliGUI2(varargin)
 
 % Edit the above text to modify the response to help stimuliGUI2
 
-% Last Modified by GUIDE v2.5 08-Dec-2015 15:37:33
+% Last Modified by GUIDE v2.5 28-Dec-2015 13:32:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -142,12 +142,21 @@ case 'White Noise Color' % User selects WN Color.
    set(handles.uipanel7, 'Visible','off');
     set(handles.uipanel9, 'Visible','off');
     set(handles.uipanel10, 'Visible','off');
-   case 'Centered Spot' % User selects Centered Spot.
+case 'Centered Spot' % User selects Centered Spot.
    set(handles.uipanel1, 'Visible','off');
     set(handles.uipanel3, 'Visible','off');
     set(handles.uipanel4, 'Visible','off');
     set(handles.uipanel5, 'Visible','off');
    set(handles.uipanel7, 'Visible','on');
+   set(handles.uipanel6, 'Visible','off');
+    set(handles.uipanel9, 'Visible','off');
+   set(handles.uipanel10, 'Visible','off');
+case 'Centered Spot plus' % User selects Centered Spot_plus.
+   set(handles.uipanel1, 'Visible','off');
+    set(handles.uipanel3, 'Visible','off');
+    set(handles.uipanel4, 'Visible','off');
+    set(handles.uipanel5, 'Visible','off');
+   set(handles.uipanel7, 'Visible','off');
    set(handles.uipanel6, 'Visible','off');
     set(handles.uipanel9, 'Visible','off');
    set(handles.uipanel10, 'Visible','off');
@@ -912,7 +921,10 @@ daqValue = get(handles.checkbox6, 'Value');
 fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Centered Spot: %f,%f,%f,%f,%f\r\n',datestr(now),circleSize,contrast,reps,duration,positionarray)
 fclose(fid);
-centeredSpot(circleSize, contrast, reps, duration,positionarray,daqValue)
+incrementValue = get(handles.checkbox7, 'Value');
+numInc=get(handles.edit46, 'String');
+numInc=str2num(numInc);
+centeredSpot(circleSize, contrast, reps, duration,positionarray,daqValue,incrementValue,numInc)
 
 
 
@@ -1261,3 +1273,35 @@ function checkbox6_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of checkbox6
+
+
+% --- Executes on button press in checkbox7.
+function checkbox7_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox7 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox7
+
+
+
+function edit46_Callback(hObject, eventdata, handles)
+% hObject    handle to edit46 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit46 as text
+%        str2double(get(hObject,'String')) returns contents of edit46 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit46_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit46 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

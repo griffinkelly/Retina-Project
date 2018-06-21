@@ -49,7 +49,7 @@ rightKey = KbName('RightArrow');
 downKey = KbName('DownArrow');
 exitkey = KbName('x');
 
-baseRect = [0 0 50 50];
+baseRect = [0 0 100 100];
 [screenXpixels, screenYpixels] = Screen('WindowSize', window);
 corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
 maxDiameter = max(baseRect) * 1.00;

@@ -113,7 +113,7 @@ else
 end
 morphTex = Screen('MakeTexture', w, morphPattern, [], [], [], [], minimorphshader);
 
-baseRect = [0 0 50 50];
+baseRect = [0 0 100 100];
 [screenXpixels, screenYpixels] = Screen('WindowSize', w);
 corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
 maxDiameter = max(baseRect) * 1.00;

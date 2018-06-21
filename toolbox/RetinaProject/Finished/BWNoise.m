@@ -1,3 +1,4 @@
+
 function timeNoise = BWNoise(seed, numRects, rectSize, scale, syncToVBL, dontclear, refresh_rate, contrast, duration,daqValue)
 % MyBWNoise([numRects=1][, rectSize=128][, scale=1][, syncToVBL=1][, dontclear=0])
 %
@@ -158,7 +159,7 @@ try
 
 	black = BlackIndex(win);
 	white = WhiteIndex(win);
-    baseRect = [0 0 50 50];
+    baseRect = [0 0 100 100];
     [screenXpixels, screenYpixels] = Screen('WindowSize', win);
     corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
     maxDiameter = max(baseRect) * 1.00;

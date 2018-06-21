@@ -48,7 +48,7 @@ rightKey = KbName('RightArrow');
 downKey = KbName('DownArrow');
 exitkey = KbName('x');
 
-baseRect = [0 0 50 50];
+baseRect = [0 0 100 100];
 [screenXpixels, screenYpixels] = Screen('WindowSize', window);
 corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
 maxDiameter = max(baseRect) * 1.00;
@@ -84,7 +84,8 @@ for frame = 1:restIntervalAfter
 
     % Color the screen grey
     Screen('FillRect', window, black);
-    Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
+    %Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
+    %%
     % Flip to the screen
     Screen('Flip', window);
     [keydown, secs, keycode, deltasexcs] = KbCheck;
@@ -105,10 +106,11 @@ end
 Priority(topPriorityLevel);
 vbl = Screen('Flip', window);
 for frame = 1:numFrames
-
+    %%
     % Color the screen white
     Screen('FillRect', window, contrast);
     Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
+    %%
     % Flip to the screen
     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
     [keydown, secs, keycode, deltasexcs] = KbCheck;
@@ -128,13 +130,13 @@ Priority(0);
 Priority(topPriorityLevel);
 vbl = Screen('Flip', window);
 for frame = 1:restInterval
-
+    %%
     % Color the screen grey
     Screen('FillRect', window, black);
     Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
     % Tell PTB no more drawing commands will be issued until the next flip
     Screen('DrawingFinished', window);
-
+    %%
     % Flip to the screen
     vbl = Screen('Flip', window, vbl + (waitframes - 0.5) * ifi);
     [keydown, secs, keycode, deltasexcs] = KbCheck;

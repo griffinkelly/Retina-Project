@@ -185,7 +185,7 @@ try
 	white = WhiteIndex(win);
     
     
-    baseRect = [0 0 50 50];
+    baseRect = [0 0 100 100];
     [screenXpixels, screenYpixels] = Screen('WindowSize', win);
     corner = CenterRectOnPointd(baseRect, screenXpixels, screenYpixels);
     maxDiameter = max(baseRect) * 1.00;
