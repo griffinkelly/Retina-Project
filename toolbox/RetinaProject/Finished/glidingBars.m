@@ -1,13 +1,16 @@
-function glidingBars(barWidth, vx, barColor, daqValue)
+function glidingBars(barWidth, vx, barColor, angle, daqValue)
 %Gliding Bars(barWidth=60, vx=1,barColor=1 daqValue=0)
 %bar color is a percentage 0-1, .5 being gray.
 
 
 %Written: Griffin Kelly, 2018, griffinkelly2013@gmail.com
 if nargin <3 || isempty(barColor)
-    barColor = 1;
+    barColor = 0;
 end
-if nargin <4 || isempty(daqValue)
+if nargin <4 || isempty(angle)
+    angle = 0;
+end
+if nargin <5 || isempty(daqValue)
     daqValue = 0;
 end
 if nargin < 2 || isempty(vx)
@@ -19,10 +22,6 @@ if nargin < 1 || isempty(barWidth)
     barWidth = 60;
 end
 
-% Clear the workspace
-close all;
-clearvars;
-sca;
 
 % Here we call some default settings for setting up Psychtoolbox
 PsychDefaultSetup(2);
@@ -68,7 +67,7 @@ dim2 = ceil(dim * sqrt(2));
 color = white;
 
 % Make our sprial texure into a screen texture for drawing
-spiralTexture = Screen('MakeTexture', window, color);
+spiralTexture = Screen('MakeTexture', window, [barColor barColor barColor]);
 
 % Define the destination rectangles for our spiral textures. This will be
 % the same size as the window we use to view our texture.
@@ -83,8 +82,6 @@ dstRects = nan(4, 4);
 % middle of the enlarged texture we made for internal texture rotation.
 srcRect = baseRectDst + (dim2 - dim);
 
-% Start Angle for all of the textures
-angle = 0;
 
 x=0;
 y=0;
@@ -98,7 +95,7 @@ while ~KbCheck
         x1 = 0-screenXpixels;
         y1 = y;
         x2 = screenXpixels*3;
-        y2 = y+10;
+        y2 = y+barWidth;
         anglePerformed=0;
     elseif (angle==30)
         %done
@@ -107,7 +104,7 @@ while ~KbCheck
         x1 = 0-screenXpixels;
         y1 = y;
         x2 = screenXpixels*3;
-        y2 = y+10;
+        y2 = y+barWidth;
         anglePerformed=30;
     elseif (angle==330)
         %done
@@ -116,7 +113,7 @@ while ~KbCheck
         x1 = 0-screenXpixels;
         y1 = y-screenYpixels;
         x2 = screenXpixels*3;
-        y2 = y+10-screenYpixels;
+        y2 = y+barWidth-screenYpixels;
         anglePerformed=-30;
     elseif (angle==180)
         %done
@@ -125,7 +122,7 @@ while ~KbCheck
         x1 = 0-screenXpixels;
         y1 = y;
         x2 = screenXpixels*3;
-        y2 = y+10;
+        y2 = y+barWidth;
         anglePerformed=0;
     elseif (angle==210)
         %done
@@ -134,7 +131,7 @@ while ~KbCheck
         x1 = 0-screenXpixels;
         y1 = y;
         x2 = screenXpixels*3;
-        y2 = y+10;
+        y2 = y+barWidth;
         anglePerformed=30;
     elseif (angle==150)
         %done
@@ -143,7 +140,7 @@ while ~KbCheck
         x1 = 0-screenXpixels;
         y1 = y-screenYpixels;
         x2 = screenXpixels*3;
-        y2 = y+10-screenYpixels;
+        y2 = y+barWidth-screenYpixels;
         anglePerformed=-30;
     elseif (angle==90)
         %done
@@ -151,7 +148,7 @@ while ~KbCheck
         y=mod(y+vx, screenYpixels);
         x1=x;
         y1=0-screenYpixels;
-        x2=x+10;
+        x2=x+barWidth;
         y2=screenYpixels*3;
         anglePerformed = 0;
     elseif (angle==60)
@@ -160,7 +157,7 @@ while ~KbCheck
         y=mod(y+vx, screenYpixels);
         x1=x-screenXpixels;
         y1=0-screenYpixels;
-        x2=x+10-screenXpixels;
+        x2=x+barWidth-screenXpixels;
         y2=screenYpixels*3;
         anglePerformed = 30;
     elseif (angle==120)
@@ -169,7 +166,7 @@ while ~KbCheck
         y=mod(y+vx, screenYpixels);
         x1=x;
         y1=0-screenYpixels;
-        x2=x+10;
+        x2=x+barWidth;
         y2=screenYpixels*3;
         anglePerformed = -30; 
     elseif (angle==270)
@@ -178,7 +175,7 @@ while ~KbCheck
         y=mod(y-vx, screenYpixels);
         x1=x;
         y1=0-screenYpixels;
-        x2=x+10;
+        x2=x+barWidth;
         y2=screenYpixels*3;
         anglePerformed = 0;
     elseif (angle==240)
@@ -187,7 +184,7 @@ while ~KbCheck
         y=mod(y-vx, screenYpixels);
         x1=x-screenXpixels;
         y1=0-screenYpixels;
-        x2=x+10-screenXpixels;
+        x2=x+barWidth-screenXpixels;
         y2=screenYpixels*3;
         anglePerformed = 30;
     elseif (angle==300)
@@ -195,7 +192,7 @@ while ~KbCheck
         y=mod(y-vx, screenYpixels);
         x1=x;
         y1=0-screenYpixels;
-        x2=x+10;
+        x2=x+barWidth;
         y2=screenYpixels*3;
         anglePerformed = -30;
     end

@@ -1,4 +1,4 @@
-function localEdgeDetection(angle, cyclespersecond, gratingwidth, gratingsize, internalRotation, contrast, duration, singleAngle,daqValue)
+function localEdgeDetection(angle, cyclespersecond, gratingwidth, gratingsize, internalRotation, contrast, duration, annulusWidth ,daqValue)
 % function MyStimulator([angle=0][, cyclespersecond=1][, gratingwidth=100][, gratingsize=100][, internalRotation=0])
 % ___________________________________________________________________
 %
@@ -55,11 +55,11 @@ AssertOpenGL;
 if nargin <9 || isempty(daqValue)
     daqValue = 0;
 end
-if nargin < 8 || isempty()
-    singleAngle = 1;
+if nargin < 8 || isempty(annulusWidth)
+    annulusWidth = 50;
 end
 if nargin < 7 || isempty(duration)
-    duration = 10;
+    duration = 25;
 end
 if nargin < 6 || isempty(contrast)
     contrast = 100;
@@ -196,7 +196,7 @@ while keepdisplay
         Screen('DrawTexture', win, gratingtex, [], [], angle, [], [], [], [], rotateMode, [phase, freq, amplitude, 0]);
         Screen('FrameRect', win, [255 255 255], corner, maxDiameter);
 
-        baseRect = [0 0 50 50];
+        baseRect = [0 0 annulusWidth annulusWidth];
         baseSquare = [0 0 100 100];
         resSmall = [250 250];
         gratingtexSmall = CreateProceduralSquareWaveGrating(win, resSmall(1), resSmall(2), [0.5 0.5 0.5 0.0]);
@@ -206,7 +206,7 @@ while keepdisplay
 
         centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
 
-        ovalBaseRect = [0 0 70 70];
+        ovalBaseRect = [0 0 annulusWidth+20 annulusWidth+20];
         ovalCircleSize = 5;
         ovalBaseRect = ovalBaseRect *ovalCircleSize;
 
