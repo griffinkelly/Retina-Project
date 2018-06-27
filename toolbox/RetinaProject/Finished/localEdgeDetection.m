@@ -142,8 +142,8 @@ vbl = Screen('Flip', win);
 % Animation loop: Repeats until keypress...
 KbName('UnifyKeyNames')
 blackkey = KbName('b');
-whitekey = KbName('w');
 graykey = KbName('g');
+whitekey = KbName('q');
 onoffkey = KbName('o');
 increasespeed = KbName('+');
 decreasespeed = KbName('-');
@@ -152,6 +152,10 @@ leftturn = KbName('LeftArrow');
 %reversekey = KbName('R') | KbName('r');
 leftkey = KbName('l');
 rightkey = KbName('r');
+akey = KbName('a');
+dkey = KbName('d');
+wkey = KbName('w');
+skey = KbName('s');
 increasegratingwidth = KbName('UpArrow');
 decreasegratingwidth = KbName('DownArrow');
 %exitkey = KbName('X') | KbName('x');
@@ -326,7 +330,22 @@ while keepdisplay
 				WaitSecs(1);
 			end	
 		KbReleaseWait;
-
+    elseif keycode(wkey)
+        yCenter = yCenter - 5;
+        str = sprintf('X: %d, Y: %d,', xCenter, yCenter);
+		disp(str);
+    elseif keycode(skey)
+        yCenter = yCenter + 5;
+        str = sprintf('X: %d, Y: %d,', xCenter, yCenter);
+		disp(str);
+    elseif keycode(akey)
+        xCenter = xCenter - 5;
+        str = sprintf('X: %d, Y: %d,', xCenter, yCenter);
+		disp(str);
+    elseif keycode(dkey)
+        xCenter = xCenter + 5;
+        str = sprintf('X: %d, Y: %d, ', xCenter, yCenter);
+		disp(str);
     end
     
     telapsed = GetSecs - tstart;

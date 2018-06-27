@@ -14,8 +14,8 @@ if nargin <5 || isempty(daqValue)
     daqValue = 0;
 end
 if nargin < 2 || isempty(vx)
-    % Tilt angle of the grating:
-    vx = 1;
+    % Tilt angle of the gratingx
+    vx = 70;
 end
 if nargin < 1 || isempty(barWidth)
     % Tilt angle of the grating:
@@ -28,6 +28,14 @@ PsychDefaultSetup(2);
 Screen('Preference', 'SkipSyncTests', 1);
 % Get the screen numbers
 screens = Screen('Screens');
+
+
+KbName('UnifyKeyNames');
+exitkey = KbName('x');
+spacekey = KbName('space');
+rightArrow = KbName('RightArrow');
+leftArrow = KbName('LeftArrow');
+
 
 % Draw to the external screen if avaliable
 screenNumber = max(screens);
@@ -82,12 +90,18 @@ dstRects = nan(4, 4);
 % middle of the enlarged texture we made for internal texture rotation.
 srcRect = baseRectDst + (dim2 - dim);
 
+% Query the frame duration
+ifi = Screen('GetFlipInterval', window);
+
+%get  pixels per advancement, multiply by 1/refresh rate of monitor. 
+vx = vx*ifi;
 
 x=0;
 y=0;
-vx=15;
+counter = 0;
+keepdisplay = 1;
 
-while ~KbCheck
+while keepdisplay
     if (angle==0)
         %done
         x=mod(x+vx, screenXpixels);
@@ -97,6 +111,7 @@ while ~KbCheck
         x2 = screenXpixels*3;
         y2 = y+barWidth;
         anglePerformed=0;
+
     elseif (angle==30)
         %done
         x=mod(x+vx, screenXpixels);
@@ -106,6 +121,7 @@ while ~KbCheck
         x2 = screenXpixels*3;
         y2 = y+barWidth;
         anglePerformed=30;
+
     elseif (angle==330)
         %done
         x=mod(x+vx, screenXpixels);
@@ -142,7 +158,7 @@ while ~KbCheck
         x2 = screenXpixels*3;
         y2 = y+barWidth-screenYpixels;
         anglePerformed=-30;
-    elseif (angle==90)
+    elseif (angle==270)
         %done
         x=mod(x+vx, screenXpixels*2);
         y=mod(y+vx, screenYpixels);
@@ -151,7 +167,7 @@ while ~KbCheck
         x2=x+barWidth;
         y2=screenYpixels*3;
         anglePerformed = 0;
-    elseif (angle==60)
+    elseif (angle==330)
         %done
         x=mod(x+vx, screenXpixels*2);
         y=mod(y+vx, screenYpixels);
@@ -160,7 +176,7 @@ while ~KbCheck
         x2=x+barWidth-screenXpixels;
         y2=screenYpixels*3;
         anglePerformed = 30;
-    elseif (angle==120)
+    elseif (angle==300)
         %done
         x=mod(x+vx, screenXpixels*2);
         y=mod(y+vx, screenYpixels);
@@ -169,7 +185,7 @@ while ~KbCheck
         x2=x+barWidth;
         y2=screenYpixels*3;
         anglePerformed = -30; 
-    elseif (angle==270)
+    elseif (angle==90)
         %done
         x=mod(x-vx, screenXpixels*2);
         y=mod(y-vx, screenYpixels);
@@ -187,7 +203,7 @@ while ~KbCheck
         x2=x+barWidth-screenXpixels;
         y2=screenYpixels*3;
         anglePerformed = 30;
-    elseif (angle==300)
+    elseif (angle==60)
         x=mod(x-vx, screenXpixels*2);
         y=mod(y-vx, screenYpixels);
         x1=x;
@@ -196,13 +212,29 @@ while ~KbCheck
         y2=screenYpixels*3;
         anglePerformed = -30;
     end
-       
+    
+    
+    if (angle == 390)
+       sca;
+       break
+    end
     % Draw the first two textuxes using whole "external" texture rotation
     Screen('DrawTextures', window, spiralTexture, srcRect,...
          [x1;y1;x2;y2], anglePerformed, [], [], []);
 
     % Flip to the screen
     Screen('Flip', window);
+    
+    [keydown, secs, keycode, deltasexcs] = KbCheck;
+    KbReleaseWait;
+    if keycode(rightArrow)
+       angle = angle+30;
+    elseif keycode(leftArrow)
+        angle = angle-30;
+    elseif keycode(exitkey)
+        sca;
+        break
+    end
 % 
 %     % Increment the angle
 %     angle = angle + angleInc;

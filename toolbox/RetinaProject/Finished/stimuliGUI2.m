@@ -1895,7 +1895,7 @@ contrast=str2num(contrastLevel{val});
 duration=get(handles.edit94, 'String');
 duration=str2num(duration);
 fprintf(' Local Edge Detection:%f,%f,%f,%f, %f \r\n',datestr(now),driftAngle,-driftSpeed,gratingwidth,contrast,duration)
-annulusWidth = 50;
+annulusWidth = 20;
 
 daqValue = get(handles.checkbox6, 'Value');
 localEdgeDetection(driftAngle, driftSpeed, gratingwidth, [], [], contrast, duration, annulusWidth, daqValue)
