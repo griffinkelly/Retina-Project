@@ -950,6 +950,7 @@ circleSize=str2num(circleSize);
 contrastLevel=get(handles.popupmenu9, 'String');
 val = get(handles.popupmenu9,'Value');
 contrast=str2num(contrastLevel{val});
+disp(contrast);
 duration=get(handles.edit28, 'String');
 duration=str2num(duration);
 reps=get(handles.edit27, 'String');
@@ -967,7 +968,7 @@ fclose(fid);
 incrementValue = get(handles.checkbox7, 'Value');
 numInc=get(handles.edit46, 'String');
 numInc=str2num(numInc);
-centeredSpot(circleSize, contrast, reps, duration,positionarray,daqValue,incrementValue,numInc)
+centeredSpot_minus(circleSize, contrast, reps, duration,positionarray,daqValue,incrementValue,numInc)
 
 
 
