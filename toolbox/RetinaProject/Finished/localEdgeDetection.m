@@ -202,7 +202,7 @@ while keepdisplay
 
         baseRect = [0 0 annulusWidth annulusWidth];
         baseSquare = [0 0 100 100];
-        resSmall = [250 250];
+        resSmall = [(annulusWidth*5) (annulusWidth*5)];
         gratingtexSmall = CreateProceduralSquareWaveGrating(win, resSmall(1), resSmall(2), [0.5 0.5 0.5 0.0]);
 
         circleSize = 5;

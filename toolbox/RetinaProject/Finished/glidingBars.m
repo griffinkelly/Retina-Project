@@ -5,7 +5,7 @@ function glidingBars(barWidth, vx, barColor, angle, daqValue)
 
 %Written: Griffin Kelly, 2018, griffinkelly2013@gmail.com
 if nargin <3 || isempty(barColor)
-    barColor = 0;
+    barColor = 1;
 end
 if nargin <4 || isempty(angle)
     angle = 0;
@@ -15,7 +15,7 @@ if nargin <5 || isempty(daqValue)
 end
 if nargin < 2 || isempty(vx)
     % Tilt angle of the gratingx
-    vx = 70;
+    vx = 500;
 end
 if nargin < 1 || isempty(barWidth)
     % Tilt angle of the grating:
@@ -28,6 +28,10 @@ PsychDefaultSetup(2);
 Screen('Preference', 'SkipSyncTests', 1);
 % Get the screen numbers
 screens = Screen('Screens');
+
+if daqValue == 1
+    daqLoop();
+end
 
 
 KbName('UnifyKeyNames');
@@ -89,7 +93,9 @@ dstRects = nan(4, 4);
 % by a value of dim2 - dim. This makes sure our window is centered on the
 % middle of the enlarged texture we made for internal texture rotation.
 srcRect = baseRectDst + (dim2 - dim);
-
+baseRect2 = [0 0 100 100];
+corner = CenterRectOnPointd(baseRect2, screenXpixels, screenYpixels);
+maxDiameter = max(baseRect2) * 1.00;
 % Query the frame duration
 ifi = Screen('GetFlipInterval', window);
 
@@ -102,6 +108,8 @@ counter = 0;
 keepdisplay = 1;
 
 while keepdisplay
+    Screen('FrameRect', window, [255 255 255], corner, maxDiameter);
+
     if (angle==0)
         %done
         x=mod(x+vx, screenXpixels);
@@ -113,7 +121,7 @@ while keepdisplay
         anglePerformed=0;
 
     elseif (angle==30)
-        %done
+        %done based on 0
         x=mod(x+vx, screenXpixels);
         y=mod(y+vx, screenYpixels*2);   
         x1 = 0-screenXpixels;
@@ -121,16 +129,43 @@ while keepdisplay
         x2 = screenXpixels*3;
         y2 = y+barWidth;
         anglePerformed=30;
-
-    elseif (angle==330)
+    elseif (angle==60)
+        x=mod(x-vx, screenXpixels*2);
+        y=mod(y-vx, screenYpixels);
+        x1=x;
+        y1=0-screenYpixels;
+        x2=x+barWidth;
+        y2=screenYpixels*3;
+        anglePerformed = -30;
+    elseif (angle==90)
         %done
-        x=mod(x+vx, screenXpixels);
-        y=mod(y+vx, screenYpixels*2);   
+        x=mod(x-vx, screenXpixels*2);
+        y=mod(y-vx, screenYpixels);
+        x1=x;
+        y1=0-screenYpixels;
+        x2=x+barWidth;
+        y2=screenYpixels*3;
+        anglePerformed = 0;
+    elseif (angle==120)
+        %doxne
+        x=mod(x-vx, screenXpixels*2);
+        y=mod(y-vx, screenYpixels);
+        x1=x-screenXpixels;
+        y1=0-screenYpixels;
+        x2=x+barWidth-screenXpixels;
+        y2=screenYpixels*3;
+        anglePerformed = 30;
+        
+    elseif (angle==150)
+        %done
+        x=mod(x+vx, screenXpixels*2);
+        y=mod(y-vx, screenYpixels*2);   
         x1 = 0-screenXpixels;
         y1 = y-screenYpixels;
         x2 = screenXpixels*3;
         y2 = y+barWidth-screenYpixels;
-        anglePerformed=-30;
+        anglePerformed=-30;        
+
     elseif (angle==180)
         %done
         x=mod(x-vx, screenXpixels);
@@ -149,15 +184,16 @@ while keepdisplay
         x2 = screenXpixels*3;
         y2 = y+barWidth;
         anglePerformed=30;
-    elseif (angle==150)
+    elseif (angle==240)
         %done
         x=mod(x+vx, screenXpixels*2);
-        y=mod(y-vx, screenYpixels*2);   
-        x1 = 0-screenXpixels;
-        y1 = y-screenYpixels;
-        x2 = screenXpixels*3;
-        y2 = y+barWidth-screenYpixels;
-        anglePerformed=-30;
+        y=mod(y+vx, screenYpixels);
+        x1=x;
+        y1=0-screenYpixels;
+        x2=x+barWidth;
+        y2=screenYpixels*3;
+        anglePerformed = -30;
+
     elseif (angle==270)
         %done
         x=mod(x+vx, screenXpixels*2);
@@ -167,15 +203,6 @@ while keepdisplay
         x2=x+barWidth;
         y2=screenYpixels*3;
         anglePerformed = 0;
-    elseif (angle==330)
-        %done
-        x=mod(x+vx, screenXpixels*2);
-        y=mod(y+vx, screenYpixels);
-        x1=x-screenXpixels;
-        y1=0-screenYpixels;
-        x2=x+barWidth-screenXpixels;
-        y2=screenYpixels*3;
-        anglePerformed = 30;
     elseif (angle==300)
         %done
         x=mod(x+vx, screenXpixels*2);
@@ -184,35 +211,18 @@ while keepdisplay
         y1=0-screenYpixels;
         x2=x+barWidth;
         y2=screenYpixels*3;
-        anglePerformed = -30; 
-    elseif (angle==90)
-        %done
-        x=mod(x-vx, screenXpixels*2);
-        y=mod(y-vx, screenYpixels);
-        x1=x;
-        y1=0-screenYpixels;
-        x2=x+barWidth;
-        y2=screenYpixels*3;
-        anglePerformed = 0;
-    elseif (angle==240)
-        %done
-        x=mod(x-vx, screenXpixels*2);
-        y=mod(y-vx, screenYpixels);
-        x1=x-screenXpixels;
-        y1=0-screenYpixels;
-        x2=x+barWidth-screenXpixels;
-        y2=screenYpixels*3;
-        anglePerformed = 30;
-    elseif (angle==60)
-        x=mod(x-vx, screenXpixels*2);
-        y=mod(y-vx, screenYpixels);
-        x1=x;
-        y1=0-screenYpixels;
-        x2=x+barWidth;
-        y2=screenYpixels*3;
-        anglePerformed = -30;
-    end
-    
+        anglePerformed = 30; 
+
+    elseif (angle==330)
+        %done, based on 0
+        x=mod(x+vx, screenXpixels);
+        y=mod(y+vx, screenYpixels*2);   
+        x1 = 0-screenXpixels;
+        y1 = y-screenYpixels;
+        x2 = screenXpixels*3;
+        y2 = y+barWidth-screenYpixels;
+        anglePerformed=-30;
+    end    
     
     if (angle == 390)
        sca;

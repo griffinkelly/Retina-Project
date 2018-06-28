@@ -22,7 +22,7 @@ function varargout = stimuliGUI2(varargin)
 
 % Edit the above text to modify the response to help stimuliGUI2
 
-% Last Modified by GUIDE v2.5 26-Jun-2018 10:35:19
+% Last Modified by GUIDE v2.5 28-Jun-2018 17:02:47
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1073,12 +1073,13 @@ function pushbutton9_Callback(hObject, eventdata, handles)
 %Code for Moving Bars GUI Panel
 number=get(handles.edit37, 'String');
 number=str2num(number);
-checkvalue = get(handles.checkbox2, 'Value');
+angle=get(handles.edit95, 'String');
+angle = str2num(angle);
 daqValue = get(handles.checkbox6, 'Value');
 fid = fopen('stimulus_record.txt','at');
 fprintf(fid, '%s, Moving Bars: %f,\r\n',datestr(now),number)
 fclose(fid);
-movingBars(number,checkvalue,daqValue);
+twelveMovingBars(number,angle,daqValue);
 
 
 
@@ -1613,12 +1614,14 @@ disp(angle);
 angle = str2double(angle);
 disp(angle)
 
-contrast = get(handles.popupmenu20, 'Value');
+contrast = get(handles.popupmenu20, 'String');
+contrast = contrast(get(handles.popupmenu25, 'Value'));
+contrast = str2double(contrast);
 contrastValue = contrast/100;
 
 daqValue = get(handles.checkbox6, 'Value');
 
-% glidingBars(barWidth, vx, contrastValue, angle, daqValue)
+glidingBars(barWidth, vx, contrastValue, angle, daqValue)
 
 % --- Executes on selection change in popupmenu20.
 function popupmenu20_Callback(hObject, eventdata, handles)
@@ -1896,8 +1899,8 @@ contrast=str2num(contrastLevel{val});
 duration=get(handles.edit94, 'String');
 duration=str2num(duration);
 fprintf(' Local Edge Detection:%f,%f,%f,%f, %f \r\n',datestr(now),driftAngle,-driftSpeed,gratingwidth,contrast,duration)
-annulusWidth = 20;
-
+annulusWidth=get(handles.edit96, 'String');
+annulusWidth=str2num(annulusWidth);
 daqValue = get(handles.checkbox6, 'Value');
 localEdgeDetection(driftAngle, driftSpeed, gratingwidth, [], [], contrast, duration, annulusWidth, daqValue)
 
@@ -1997,6 +2000,52 @@ function popupmenu25_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 % Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit95_Callback(hObject, eventdata, handles)
+% hObject    handle to edit95 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit95 as text
+%        str2double(get(hObject,'String')) returns contents of edit95 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit95_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit95 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit96_Callback(hObject, eventdata, handles)
+% hObject    handle to edit96 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit96 as text
+%        str2double(get(hObject,'String')) returns contents of edit96 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit96_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit96 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
