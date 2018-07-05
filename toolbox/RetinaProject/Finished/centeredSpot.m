@@ -37,6 +37,7 @@ end
 contrast=contrast/100;
 % Here we call some default settings for setting up Psychtoolbox
 PsychDefaultSetup(2);
+%Screen('Preference', 'SkipSyncTests', 1);
 Screen('Preference', 'VisualDebugLevel', 1);
 
 % Get the screen numbers
@@ -52,7 +53,7 @@ grey= white / 2;
 % Open an on screen window
 %The last variable, 'black' is the background color. Alternate to change
 %background color
-[window, windowRect] = PsychImaging('OpenWindow', screenNumber, black);
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, grey);
 
 % Get the size of the on screen wind  ow
 [screenXpixels, screenYpixels] = Screen('WindowSize', window);
@@ -90,12 +91,13 @@ maxDiameter = max(baseRect) * 1.00;
 % Center the rectangle on the centre of the screen
 centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
 corner = CenterRectOnPointd(baseSquare, screenXpixels, screenYpixels);
-%amplitude of a sinusodial wave implmentation
-amplitude = white - (contrast*white);
+%amplitude of a sinusodial wave implementation
+amplitude = black + (white*contrast);
 amp_number = amplitude/2;
 % Set the color of the sinusoid peaks and troughs.  
-rectColor = white-amp_number;
-rectColor2 = amp_number;
+rectColor = black+amp_number;
+rectColor2 = grey;
+
 
 
 ifi = Screen('GetFlipInterval', window);

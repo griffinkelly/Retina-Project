@@ -16,7 +16,7 @@ if nargin < 1 || isempty(numberofbars)
     % Tilt angle of the grating:
     numberofbars = 6;
 end
-Screen('Preference', 'SkipSyncTests', 1);
+%Screen('Preference', 'SkipSyncTests', 1);
 Screen('Preference', 'VisualDebugLevel', 3);               
 % Here we call some default settings for setting up Psychtoolbox
 PsychDefaultSetup(2);

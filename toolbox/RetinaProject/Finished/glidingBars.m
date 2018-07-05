@@ -25,7 +25,7 @@ end
 
 % Here we call some default settings for setting up Psychtoolbox
 PsychDefaultSetup(2);
-Screen('Preference', 'SkipSyncTests', 1);
+%Screen('Preference', 'SkipSyncTests', 1);
 % Get the screen numbers
 screens = Screen('Screens');
 
