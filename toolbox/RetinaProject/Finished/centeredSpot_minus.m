@@ -37,7 +37,7 @@ end
 contrast=contrast/100;
 % Here we call some default settings for setting up Psychtoolbox
 PsychDefaultSetup(2);
-Screen('Preference', 'SkipSyncTests', 1);
+%Screen('Preference', 'SkipSyncTests', 1);
 Screen('Preference', 'VisualDebugLevel', 1);
 
 % Get the screen numbers
