@@ -1621,6 +1621,10 @@ contrastValue = contrast/100;
 
 daqValue = get(handles.checkbox6, 'Value');
 
+fid = fopen('stimulus_record.txt','at');
+fprintf(fid, '%s, SlidingBars Bars: %f,\r\n',datestr(now),angle)
+fclose(fid);
+
 glidingBars(barWidth, vx, contrastValue, angle, daqValue)
 
 % --- Executes on selection change in popupmenu20.
